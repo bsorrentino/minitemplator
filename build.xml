@@ -1,0 +1,60 @@
+<!-- Ant build file for MiniTemplator Java version -->
+<project name="miniTemplator" default="buildAll">
+
+<property name="srcDir"            location="src/main/java"/>
+<property name="classesDir"        location="target/classes"/>
+<property name="javaDocDir"        location="target/javadoc"/>
+<property name="jarFile"           location="target/miniTemplator.jar"/>
+<property name="samplesSrcDir"     location="src/samples"/>
+<property name="samplesClassesDir" location="target/samples-classes"/>
+<property name="samplesOutputDir"  location="target/samples-output"/>
+
+<target name="buildAll" description="Builds JAR file and docs."
+   depends="buildMiniTemplatorJar, buildJavaDoc"/>
+
+<target name="buildMiniTemplatorJar" description="Compiles the Java sources and builds the MiniTemplator JAR file.">
+ <delete dir="${classesDir}" failonerror="true"/>
+ <mkdir dir="${classesDir}"/>
+ <javac srcdir="${srcDir}" sourcepath="" deprecation="true" includeAntRuntime="false" debug="true" debuglevel="lines,source"
+    target="1.5" destdir="${classesDir}">
+  <compilerarg line="-Xlint -Xmaxerrs 6"/>
+ </javac>
+ <jar destfile="${jarFile}">
+  <fileset dir="${classesDir}"/>
+ </jar>
+</target>
+
+<target name="buildJavaDoc" description="Generates the API documentation (Javadoc).">
+ <delete dir="${javaDocDir}" failonerror="true"/>
+ <mkdir dir="${javaDocDir}"/>
+ <javadoc sourcepath="${srcDir}" destdir="${javaDocDir}" failonerror="true"
+    nodeprecatedlist="true" notree="true" noindex="true" nohelp="true"
+    bottom="&lt;br&gt;&lt;span style='font-size: 10pt; font-family: Arial, Helvetica, sans-serif'&gt;Home page: &lt;a href='http://www.source-code.biz/MiniTemplator' target='_top'&gt;www.source-code.biz/MiniTemplator&lt;/a&gt;&lt;/span&gt;"/>
+    <!-- Leave access="protected" (=default) to list protected members! -->
+</target>
+
+<target name="runSample1" description="Compiles and runs the Sample1 program.">
+ <antcall target="runSample"><param name="sampleName" value="Sample1"/></antcall>
+</target>
+<target name="runSample2" description="Compiles and runs the Sample2 program.">
+ <antcall target="runSample"><param name="sampleName" value="Sample2"/></antcall>
+</target>
+
+<target name="runSample" description="Subtask to compile and run a sample.">
+ <mkdir dir="${samplesClassesDir}"/>
+ <javac srcdir="${samplesSrcDir}" includes="${sampleName}.java"
+    sourcepath="" deprecation="true" includeAntRuntime="false" debug="true" debuglevel="lines,source"
+    classpath="${jarFile}"
+    destdir="${samplesClassesDir}">
+  <compilerarg line="-Xlint -Xmaxerrs 6"/>
+ </javac>
+ <mkdir dir="${samplesOutputDir}"/>
+ <java classname="${sampleName}" failonerror="true">
+  <classpath>
+   <pathelement location="${samplesClassesDir}"/>
+   <pathelement location="${jarFile}"/>
+  </classpath>
+ </java>
+</target>
+
+</project>
