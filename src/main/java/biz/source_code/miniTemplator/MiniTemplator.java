@@ -212,8 +212,10 @@ private void init (TemplateSpecification templateSpec)
    mtp = new MiniTemplatorParser(templateText, templateSpec.conditionFlags, this);
    reset(); }
 
-// Dummy constructor, used internally in newInstance().
-private MiniTemplator() {}
+/**
+* Dummy constructor, used internally in newInstance().
+*/
+protected MiniTemplator() {}
 
 /**
 * Allocates a new uninitialized MiniTemplator object.
