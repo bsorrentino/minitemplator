@@ -1,0 +1,85 @@
+
+MiniTemplator Changes
+---------------------
+
+2010-02-19 chdh
+Protected method MiniTemplator.newInstance() added to enable
+subclasses of MiniTemplator to survive cloneReset().
+
+2009-04-15 chdh
+The complement ("not") operator "!" may now be used in the flag
+expressions of the $if and $elseif commands.
+
+2009-01-25 chdh
+New constructor MiniTemplator(String) added.
+Note that this constructor is not compatible with the old (prior to
+2007-05-19) constructor with the same signature, because the old
+constructor with that signature expected the template string in the
+string argument instead of the file name.
+The nested exceptions (TemplateSyntaxException,
+VariableNotDefinedException and BlockNotDefinedException) are now
+derived from RuntimeException instead of Exception, to make them
+unchecked exceptions that do not have to be catched or declared.
+Convenience methods added: setVariableOpt(String, String),
+setVariableOptEsc(String, String) and addBlockOpt(String).
+EPL license added.
+
+2009-01-22 chdh
+Method getVariables() added.
+
+2007-05-19 chdh
+Conditional blocks ($if statement) implemented.
+New nested class {@link MiniTemplator.TemplateSpecification}.
+Old constructors replaced by the new general constructor
+MiniTemplator(TemplateSpecification).
+Parameter type of generateOutput(String) changed form File to String.
+Second MiniTemplatorCache constructor removed.
+Parameters of MiniTemplatorCache.get() method changed.
+
+2006-10-18 chdh
+New variant of addBlock() added with an isOptional parameter.
+
+2006-07-07 chdh
+Extended MiniTemplator and MiniTemplatorCache constructors with
+charset argument added.
+
+2004-11-20 chdh
+"$Include" command changed so that the command text is not copied to
+the output file.
+
+2004-11-07 chdh
+Method MiniTemplatorCache.clear() added.
+
+2004-11-06 chdh
+Changes for Java 5. (Unfortunately this version of MiniTemplator is no
+longer compatible with Java 1.4).
+"$Include" command implemented. Method loadSubtemplate and a new
+constructor variant added.
+Method cloneReset and class MiniTemplatorCache added.
+MiniTemplatorCache Module created.
+
+2004-10-28 chdh
+Multiple blocks with the same name may now occur within a template.
+No syntax error exception ("unknown command") is thrown any more, if a
+HTML comment starts with "${".
+serialVersionUID added to exception classes (for Java 5 compatibility).
+
+2004-04-19 chdh
+Methods blockExists, setVariableEsc and escapeHtml added.
+
+2004-04-07 chdh
+Parameter isOptional added to method setVariable.
+Licensing changed from GPL to LGPL.
+
+2003-07-16 chdh
+Method setVariable() changed to throw an exception when the variable
+does not exist (instead of returning false).
+
+2003-07-08 chdh
+Method variableExists() added.
+
+2003-03-25 chdh
+MiniTemplator converted from Visual Basic to Java.
+
+2001-10-24 chdh (Christian d'Heureuse)
+Visual Basic version of MiniTemplator created.

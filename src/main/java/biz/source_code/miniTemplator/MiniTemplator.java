@@ -1,4 +1,4 @@
-// Copyright 2003-2009 Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland
+// Copyright 2003-2010 Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland
 // www.source-code.biz, www.inventec.ch/chdh
 //
 // This module is multi-licensed and may be used under the terms
@@ -67,52 +67,9 @@ import java.util.Set;
 *  </ul>
 *
 * <p>
-* Home page: <a href="http://www.source-code.biz/MiniTemplator">www.source-code.biz/MiniTemplator</a><br>
-* Author: Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland<br>
-* Multi-licensed: EPL/LGPL.
-*
-* <p>
-* Version history:</p>
-* <table cellpadding=3 cellspacing=0 border=1><tbody style="vertical-align:top">
-* <tr><td>2001-10-24<td>chdh<br>(Christian d'Heureuse)<td> VBasic version created.
-* <tr><td>2003-03-25<td>chdh<td> Converted from VB to Java.
-* <tr><td>2003-07-08<td>chdh<td> Method variableExists added.
-* <tr><td>2003-07-16<td>chdh<td> Method setVariable changed to throw an exception when the variable does not exist (instead of returning false).
-* <tr><td>2004-04-07<td>chdh<td> Parameter isOptional added to method setVariable.
-*   Licensing changed from GPL to LGPL.
-* <tr><td>2004-04-19<td>chdh<td> Methods blockExists, setVariableEsc and escapeHtml added.
-* <tr><td>2004-10-28<td>chdh<td>
-*   Multiple blocks with the same name may now occur within a template.<br>
-*   No syntax error exception ("unknown command") is thrown any more, if a HTML comment starts with "${".<br>
-*   serialVersionUID added to exception classes (for Java 5 compatibility).
-* <tr><td>2004-11-06<td>chdh<td>
-*   Changes for Java 5. (Unfortunately this version of MiniTemplator is no longer compatible with Java 1.4).<br>
-*   "$Include" command implemented. Method loadSubtemplate and a new constructor variant added.<br>
-*   Method cloneReset and class MiniTemplatorCache added.<br>
-* <tr><td>2004-11-20<td>chdh<td> "$Include" command changed so that the command text is not copied to the output file.
-* <tr><td>2006-07-07<td>chdh<td> Extended constructor with <code>charset</code> argument added.
-* <tr><td>2006-10-18<td>chdh<td> New variant of <code>addBlock()</code> added with an <code>isOptional</code> parameter.<br>
-* <tr><td>2007-05-19<td>chdh<td><ul style="margin-top:0; margin-bottom:0">
-*  <li>Conditional blocks ($if statement) implemented.
-*  <li>New nested class {@link MiniTemplator.TemplateSpecification}.
-*  <li>Old constructors replaced by the new general constructor {@link #MiniTemplator(TemplateSpecification)}.
-*  <li>Parameter type of {@link #generateOutput(String)} changed form <code>File</code> to <code>String</code>.
-*  </ul>
-* <tr><td>2009-01-22<td>chdh<td> Method {@link #getVariables()} added.
-* <tr><td>2009-01-25<td>chdh<td><ul style="margin-top:0; margin-bottom:0">
-*   <li>New constructor {@link #MiniTemplator(String)} added.
-*       Note that this constructor is not compatible with the old (prior to 2007-05-19) constructor with the same signature,
-*       because the old constructor with that signature expected the template string in the string argument instead of the file name.
-*   <li>The nested exceptions ({@link TemplateSyntaxException}, {@link VariableNotDefinedException} and
-*       {@link BlockNotDefinedException}) are now derived from <code>RuntimeException</code> instead of
-*       <code>Exception</code>, to make them unchecked exceptions that do not have to be catched or declared.
-*   <li>Convenience methods added: {@link #setVariableOpt(String, String)}, {@link #setVariableOptEsc(String, String)} and {@link #addBlockOpt(String)}.
-*   <li>EPL license added.
-*  </ul>
-* <tr><td>2009-04-15<td>chdh<td> The complement ("not") operator "!" may now be used in the flag expressions of the $if and $elseif commands.
-* </tbody></table>
+* Project home page: <a href="http://www.source-code.biz/MiniTemplator">www.source-code.biz/MiniTemplator</a><br>
+* Author: Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland
 */
-
 public class MiniTemplator {
 
 //--- exceptions -----------------------------------------------------
@@ -255,8 +212,16 @@ private void init (TemplateSpecification templateSpec)
    mtp = new MiniTemplatorParser(templateText, templateSpec.conditionFlags, this);
    reset(); }
 
-// Private dummy constructor, used for cloneReset().
+// Dummy constructor, used internally in newInstance().
 private MiniTemplator() {}
+
+/**
+* Allocates a new uninitialized MiniTemplator object.
+* This method is intended to be overridden in a derived class.
+* It is called from cloneReset() to create a new MiniTemplator object.
+*/
+protected MiniTemplator newInstance() {
+   return new MiniTemplator(); }
 
 //--- loadSubtemplate ------------------------------------------------
 
@@ -315,7 +280,7 @@ public void reset() {
 * clone the cached MiniTemplator objects.
 */
 public MiniTemplator cloneReset() {
-   MiniTemplator m = new MiniTemplator();
+   MiniTemplator m = newInstance();
    m.mtp = mtp;                                            // the MiniTemplatorParser object is shared among the clones
    m.charset = charset;
    // (subtemplateBasePath does not have to be copied, because the subtemplates have already been read)

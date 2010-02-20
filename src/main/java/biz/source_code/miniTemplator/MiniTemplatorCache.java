@@ -1,7 +1,8 @@
-// Copyright 2003-2009 Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland
-// www.source-code.biz, www.inventec.ch
+// Copyright 2003-2010 Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland
+// www.source-code.biz, www.inventec.ch/chdh
 //
-// This module is multi-licensed and may be used under the terms of any of the following licenses:
+// This module is multi-licensed and may be used under the terms
+// of any of the following licenses:
 //
 //  EPL, Eclipse Public License, http://www.eclipse.org/legal
 //  LGPL, GNU Lesser General Public License, http://www.gnu.org/licenses/lgpl.html
@@ -24,18 +25,6 @@ import java.util.HashMap;
 * Home page: <a href="http://www.source-code.biz/MiniTemplator">www.source-code.biz/MiniTemplator</a><br>
 * Author: Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland<br>
 * Multi-licensed: EPL/LGPL.
-*
-* <p>
-* Version history:</p>
-* <table cellpadding=3 cellspacing=0 border=1><tbody style="vertical-align:top">
-* <tr><td>2004-11-06<td>chdh<td> Module created.
-* <tr><td>2004-11-07<td>chdh<td> Method "clear" added.<br>
-* <tr><td>2006-07-07<td>chdh<td> Extended constructor with <code>charset</code> argument added.
-* <tr><td>2007-05-19<td>chdh<td><ul style="margin-top:0; margin-bottom:0">
-*  <li>Second constructor removed.
-*  <li>Parameters of get() method changed.
-*  </ul>
-* </tbody></table>
 */
 public class MiniTemplatorCache {
 
