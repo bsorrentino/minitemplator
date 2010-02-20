@@ -1,58 +1,67 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>biz.source_code</groupId>
-  <artifactId>MiniTemplator</artifactId>
+  <artifactId>minitemplator</artifactId>
   <name>MiniTemplator</name>
-  <version>1.0</version>
+  <version>2010-02-19</version>
   <description>MiniTemplator is a compact template engine for HTML files.</description>
   <url>http://www.source-code.biz/MiniTemplator/</url>
   <developers>
-  	<developer>
-  		<name>Christian d'Heureuse</name>
-  		<email>chdh@inventec.ch</email>
-  		<timezone>+1</timezone>
-  		<roles>
-  			<role>architect</role>
-  			<role>developer</role>
-  		</roles>
-  	</developer>
+    <developer>
+      <name>Christian d'Heureuse</name>
+      <email>chdh@inventec.ch</email>
+      <timezone>+1</timezone>
+      <url>http://www.inventec.ch/chdh</url>
+      <organization>Inventec Informatik AG</organization>
+      <organizationUrl>http://www.inventec.ch</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+    </developer>
   </developers>
   <contributors>
-  	<contributor>
-  		<name>bartolomeo Sorrentino</name>
-  		<email>bartolomeo.sorrentino@gmail.com</email>
-  		<organization>Softphone</organization>
-  		<organizationUrl>http://www.softphone.it</organizationUrl>
-  		<roles>
-  			<role>mavenizer</role>
-  		</roles>
-  	</contributor>
+    <contributor>
+      <name>bartolomeo Sorrentino</name>
+      <email>Bartolomeo.sorrentino@gmail.com</email>
+      <organization>Softphone</organization>
+      <organizationUrl>http://www.softphone.it</organizationUrl>
+      <roles>
+        <role>mavenizer</role>
+      </roles>
+    </contributor>
   </contributors>
   <scm>
-  	<developerConnection>scm:svn:http://svn.source-code.biz/minitemplator-java/trunk</developerConnection>
-  	<url>http://svn.source-code.biz/viewvc/minitemplator-java/trunk/</url>
+    <developerConnection>scm:svn:http://svn.source-code.biz/minitemplator-java/trunk</developerConnection>
+    <url>http://svn.source-code.biz/viewvc/minitemplator-java/trunk/</url>
   </scm>
   <organization>
-  	<name>source-code.biz</name>
-  	<url>http://www.source-code.biz/</url>
+    <name>source-code.biz</name>
+    <url>http://www.source-code.biz/</url>
   </organization>
   <licenses>
-  <license>
-    <name>GNU LGPL</name>
-    <url>http://www.gnu.org/licenses/lgpl.html</url>
-    <distribution>repo</distribution>
-    <comments>Open Source and Free Software. It may be used freely, even for commercial projects</comments>
-  </license>
-</licenses>
+    <license>
+      <name>EPL (Eclipse Public License)</name>
+      <url>http://www.eclipse.org/legal</url>
+      <distribution>repo</distribution>
+      <comments>MiniTemplator is multi-licensed, EPL+LGPL. Please contact the author if you need another license.</comments>
+    </license>
+    <license>
+      <name>GNU LGPL</name>
+      <url>http://www.gnu.org/licenses/lgpl.html</url>
+      <distribution>repo</distribution>
+      <comments>MiniTemplator is multi-licensed, EPL+LGPL. Please contact the author if you need another license.</comments>
+    </license>
+  </licenses>
   <build>
-  	<plugins>
-  		<plugin>
-  			<artifactId>maven-compiler-plugin</artifactId>
-  			<configuration>
-  				<source>1.5</source>
-  				<target>1.5</target>
-  			</configuration>
-  		</plugin>
-  	</plugins>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>
