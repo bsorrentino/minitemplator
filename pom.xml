@@ -36,6 +36,14 @@
   	<name>source-code.biz</name>
   	<url>http://www.source-code.biz/</url>
   </organization>
+  <licenses>
+  <license>
+    <name>GNU LGPL</name>
+    <url>http://www.gnu.org/licenses/lgpl.html</url>
+    <distribution>repo</distribution>
+    <comments>Open Source and Free Software. It may be used freely, even for commercial projects</comments>
+  </license>
+</licenses>
   <build>
   	<plugins>
   		<plugin>
