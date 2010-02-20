@@ -5,7 +5,7 @@
   <name>MiniTemplator</name>
   <version>2010-02-19</version>
   <description>MiniTemplator is a compact template engine for HTML files.</description>
-  <url>http://www.source-code.biz/MiniTemplator/</url>
+  <url>http://www.source-code.biz/MiniTemplator</url>
   <developers>
     <developer>
       <name>Christian d'Heureuse</name>
@@ -33,7 +33,7 @@
   </contributors>
   <scm>
     <developerConnection>scm:svn:http://svn.source-code.biz/minitemplator-java/trunk</developerConnection>
-    <url>http://svn.source-code.biz/viewvc/minitemplator-java/trunk/</url>
+    <url>http://svn.source-code.biz/viewvc/minitemplator-java/trunk</url>
   </scm>
   <organization>
     <name>source-code.biz</name>
