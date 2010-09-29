@@ -2,6 +2,10 @@
 MiniTemplator Changes
 ---------------------
 
+2010-09-29 chdh
+Convenience methods MiniTemplator.setVariable(String, int) and
+setVariableOpt(String, int) added.
+
 2010-02-19 chdh
 Protected method MiniTemplator.newInstance() added to enable
 subclasses of MiniTemplator to survive cloneReset().

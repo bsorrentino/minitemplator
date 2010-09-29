@@ -323,6 +323,18 @@ public void setVariable (String variableName, String variableValue)
    setVariable (variableName, variableValue, false); }
 
 /**
+* Sets a template variable to an integer value.
+* <p>Convenience method for: <code>setVariable (variableName, Integer.toString(variableValue))</code>
+* @param  variableName    the name of the variable to be set. Case-insensitive.
+* @param  variableValue   the new value of the variable.
+* @throws VariableNotDefinedException when no variable with the
+*    specified name exists in the template.
+*/
+public void setVariable (String variableName, int variableValue)
+      throws VariableNotDefinedException {
+   setVariable (variableName, Integer.toString(variableValue)); }
+
+/**
 * Sets an optional template variable.
 * <p>Convenience method for: <code>setVariable (variableName, variableValue, true)</code>
 * @param  variableName    the name of the variable to be set. Case-insensitive.
@@ -331,6 +343,18 @@ public void setVariable (String variableName, String variableValue)
 */
 public void setVariableOpt (String variableName, String variableValue) {
    setVariable (variableName, variableValue, true); }
+
+/**
+* Sets an optional template variable to an integer value.
+* <p>Convenience method for: <code>setVariableOpt (variableName, Integer.toString(variableValue))</code>
+* @param  variableName    the name of the variable to be set. Case-insensitive.
+* @param  variableValue   the new value of the variable.
+*/
+public void setVariableOpt (String variableName, int variableValue) {
+   // We want to avoid the integer to string conversion if the template variable does not exist.
+   int varNo = mtp.lookupVariableName(variableName);
+   if (varNo == -1) return;
+   varValuesTab[varNo] = Integer.toString(variableValue); }
 
 /**
 * Sets a template variable to an escaped value.

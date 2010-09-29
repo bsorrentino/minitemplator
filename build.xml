@@ -22,6 +22,7 @@
  <jar destfile="${jarFile}">
   <fileset dir="${classesDir}"/>
  </jar>
+ <delete dir="${classesDir}" failonerror="true"/>
 </target>
 
 <target name="buildJavaDoc" description="Generates the API documentation (Javadoc).">
