@@ -240,7 +240,7 @@ protected MiniTemplator newInstance() {
 *        This is the argument string that was specified with the "$Include" command.
 *        If the string has quotes, the quotes are removed before this method is called.
 * @return the template text string of the subtemplate.
-**/
+*/
 protected String loadSubtemplate (String subtemplateName) throws IOException {
    String fileName = new File(subtemplateBasePath, subtemplateName).getPath();
    return readFileIntoString(fileName); }
@@ -998,7 +998,6 @@ private boolean conditionalExclude (int tPosBegin, int tPosEnd) {
 // flags in the expression with the flags in TemplateSpecification.conditionFlags.
 // Returns true the condition is met.
 private boolean evaluateConditionFlags (String flags) {
-   if (conditionFlags == null) return false;
    int p = 0;
    while (true) {
       p = skipBlanks(flags, p);
@@ -1011,7 +1010,7 @@ private boolean evaluateConditionFlags (String flags) {
       int p0 = p;
       p = skipNonBlanks(flags, p0+1);
       String flag = flags.substring(p0, p).toUpperCase();
-      if (conditionFlags.contains(flag) ^ complement) return true; }
+      if ((conditionFlags != null && conditionFlags.contains(flag)) ^ complement) return true; }
    return false; }
 
 // Processes the $if command.

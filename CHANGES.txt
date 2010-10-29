@@ -2,6 +2,11 @@
 MiniTemplator Changes
 ---------------------
 
+2010-10-30 chdh
+Error corrected: When the conditionFlags set was empty or null, the
+block of an IF statement in the form "$if !flag" was not included
+in the output.
+
 2010-09-29 chdh
 Convenience methods MiniTemplator.setVariable(String, int) and
 setVariableOpt(String, int) added.
