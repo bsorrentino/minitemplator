@@ -1,6 +1,9 @@
 
-MiniTemplator Changes
----------------------
+MiniTemplator Changes (Java version)
+------------------------------------
+
+2011-05-17 chdh
+Directory structure changed to make it Maven compliant.
 
 2010-10-30 chdh
 Error corrected: When the conditionFlags set was empty or null, the

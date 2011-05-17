@@ -30,30 +30,38 @@
     <!-- We need access="protected" (=default) to list protected members! -->
 </target>
 
+<target name="runExample1" description="Compiles and runs the Example1 program.">
+ <antcall target="runExample"><param name="exampleName" value="Example1"/></antcall>
+</target>
+<target name="runExample2" description="Compiles and runs the Example2 program.">
+ <antcall target="runExample"><param name="exampleName" value="Example2"/></antcall>
 </target>
 
-<target name="runSample1" description="Compiles and runs the Sample1 program.">
- <antcall target="runSample"><param name="sampleName" value="Sample1"/></antcall>
-</target>
-<target name="runSample2" description="Compiles and runs the Sample2 program.">
- <antcall target="runSample"><param name="sampleName" value="Sample2"/></antcall>
-</target>
-
-<target name="runSample" description="Subtask to compile and run a sample.">
- <mkdir dir="${samplesClassesDir}"/>
- <javac srcdir="${samplesSrcDir}" includes="${sampleName}.java"
+<target name="runExample" depends="package" description="Subtask to compile and run one of the example programs.">
+ <mkdir dir="target/example-classes"/>
+ <javac srcdir="src/examples" includes="${exampleName}.java"
     sourcepath="" deprecation="true" includeAntRuntime="false" debug="true" debuglevel="lines,source"
-    classpath="${jarFile}"
-    destdir="${samplesClassesDir}">
-  <compilerarg line="-Xlint -Xmaxerrs 6"/>
+    classpath="target/miniTemplator.jar"
+    destdir="target/example-classes">
+  <compilerarg line="-Xlint -Xmaxerrs 5"/>
  </javac>
- <mkdir dir="${samplesOutputDir}"/>
- <java classname="${sampleName}" failonerror="true">
+ <mkdir dir="target/examples-output"/>
+ <java classname="${exampleName}" failonerror="true">
   <classpath>
-   <pathelement location="${samplesClassesDir}"/>
-   <pathelement location="${jarFile}"/>
+   <pathelement location="target/example-classes"/>
+   <pathelement location="target/miniTemplator.jar"/>
   </classpath>
  </java>
+</target>
+
+<target name="buildDistribZip" description="Builds the distribution ZIP file.">
+ <antcall target="clean"/>
+ <antcall target="package"/>
+ <antcall target="javaDoc"/>
+ <zip destfile="target/MiniTemplator-java.zip">
+  <zipfileset dir="."
+   includes="build.xml, CHANGES.txt, README.txt, MiniTemplator.html, src/, target/miniTemplator.jar, target/javadoc/"/>
+ </zip>
 </target>
 
 </project>
