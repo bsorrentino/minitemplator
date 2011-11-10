@@ -50,21 +50,21 @@ public synchronized MiniTemplator get (MiniTemplator.TemplateSpecification templ
    MiniTemplator mt = cache.get(key);
    if (mt == null) {
       mt = new MiniTemplator(templateSpec);
-      cache.put (key, mt); }
+      cache.put(key, mt); }
    return mt.cloneReset(); }
 
 private static String generateCacheKey (MiniTemplator.TemplateSpecification templateSpec) {
    StringBuilder key = new StringBuilder(128);
    if (templateSpec.templateText != null)
-      key.append (templateSpec.templateText);
+      key.append(templateSpec.templateText);
     else if (templateSpec.templateFileName != null)
-      key.append (templateSpec.templateFileName);
+      key.append(templateSpec.templateFileName);
     else
       throw new IllegalArgumentException("No templateFileName or templateText specified.");
    if (templateSpec.conditionFlags != null) {
       for (String flag : templateSpec.conditionFlags) {
-         key.append ('|');
-         key.append (flag.toUpperCase()); }}
+         key.append('|');
+         key.append(flag.toUpperCase()); }}
    return key.toString(); }
 
 /**
