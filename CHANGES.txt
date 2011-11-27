@@ -2,6 +2,9 @@
 MiniTemplator Changes (Java version)
 ------------------------------------
 
+2011-11-27 chdh
+Short form syntax added for conditional blocks.
+
 2011-05-17 chdh
 Directory structure changed to make it Maven compliant.
 

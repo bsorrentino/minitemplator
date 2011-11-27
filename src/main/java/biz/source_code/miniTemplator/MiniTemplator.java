@@ -49,6 +49,21 @@ import java.util.Set;
 *         ... included if none of the above conditions is met ...
 *       &lt;!-- $endIf --&gt;
 *
+*    Short form of conditional blocks:
+*    (only recognized if {@link TemplateSpecification#shortFormEnabled TemplateSpecification.shortFormEnabled} is <code>true</code>)
+*       &lt;$? flag1 flag2 &gt;
+*         ... included if flag1 or flag2 is set ...
+*       &lt;$: !flag3 flag4 &gt;
+*         ... included if flag3 is not set or flag4 is set ...
+*       &lt;$:&gt;
+*         ... included if none of the above conditions is met ...
+*       &lt;$/?&gt;
+*    Example:
+*       &lt;$?de&gt; Hallo Welt!
+*       &lt;$:fr&gt; Bonjour tout le monde!
+*       &lt;$:  &gt; Hello world!
+*       &lt;$/?&gt;
+*
 *    Include a subtemplate:
 *       &lt;!-- $include relativeFileName --&gt;</pre>
 *
@@ -142,7 +157,12 @@ public static class TemplateSpecification {                // template specifica
    * A set of flag names, that can be used with the $if and $elseIf commands.
    * The flag names are case-insensitive.
    */
-   public Set<String>        conditionFlags; }
+   public Set<String>        conditionFlags;
+
+   /**
+   * Enables the short form syntax for conditional blocks.
+   */
+   public boolean            shortFormEnabled; }
 
 //--- private nested classes -----------------------------------------
 
@@ -216,7 +236,7 @@ private void init (TemplateSpecification templateSpec)
       templateText = readFileIntoString(templateSpec.templateFileName); }
    if (templateText == null) {
       throw new IllegalArgumentException("No templateFileName or templateText specified."); }
-   mtp = new MiniTemplatorParser(templateText, templateSpec.conditionFlags, this);
+   mtp = new MiniTemplatorParser(templateText, templateSpec.conditionFlags, templateSpec.shortFormEnabled, this);
    reset(); }
 
 /**
@@ -703,9 +723,13 @@ class MiniTemplatorParser {
 
 //--- constants ------------------------------------------------------
 
-private static final int     maxNestingLevel = 20;         // maximum number of block nestings
-private static final int     maxCondLevels = 20;           // maximum number of nested conditional commands ($if)
+private static final int     maxNestingLevel  = 20;        // maximum number of block nestings
+private static final int     maxCondLevels    = 20;        // maximum number of nested conditional commands ($if)
 private static final int     maxInclTemplateSize = 1000000; // maximum length of template string when including subtemplates
+private static final String  cmdStartStr      = "<!--";    // command start string
+private static final String  cmdEndStr        = "-->";     // command end string
+private static final String  cmdStartStrShort = "<$";      // short form command start string
+private static final String  cmdEndStrShort   = ">";       // short form command end string
 
 //--- nested classes -------------------------------------------------
 
@@ -734,6 +758,7 @@ public static class BlockTabRec {                          // block table record
 
 public  String               templateText;                 // contents of the template file
 private HashSet<String>      conditionFlags;               // set of the condition flags, converted to uppercase
+private boolean              shortFormEnabled;             // true to enable the short form of commands ("<$...>")
 
 public  String[]             varTab;                       // variables table, contains variable names, array index is variable no
 public  int                  varTabCnt;                    // no of entries used in VarTab
@@ -762,10 +787,11 @@ private boolean              resumeCmdParsingFromStart;    // true = resume comm
 
 // (The MiniTemplator object is only passed to the parser, because the
 // parser needs to call MiniTemplator.loadSubtemplate() to load subtemplates.)
-public MiniTemplatorParser (String templateText, Set<String> conditionFlags, MiniTemplator miniTemplator)
+public MiniTemplatorParser (String templateText, Set<String> conditionFlags, boolean shortFormEnabled, MiniTemplator miniTemplator)
       throws MiniTemplator.TemplateSyntaxException {
    this.templateText = templateText;
    this.conditionFlags = createConditionFlagsSet(conditionFlags);
+   this.shortFormEnabled = shortFormEnabled;
    this.miniTemplator = miniTemplator;
    parseTemplate();
    this.miniTemplator = null; }
@@ -829,30 +855,57 @@ private void endMainBlock() {
    btr.definitionIsOpen = false;
    currentNestingLevel--; }
 
+//--- Template commands --------------------------------------------------------
+
 // Parses commands within the template in the format "<!-- $command parameters -->".
+// If shortFormEnabled is true, the short form commands in the format "<$...>" are also recognized.
 private void parseTemplateCommands()
       throws MiniTemplator.TemplateSyntaxException {
-   int p = 0;
+   int p = 0;                                              // p is the current position within templateText
    while (true) {
-      int p0 = templateText.indexOf("<!--", p);
-      if (p0 == -1) {
+      int p0 = templateText.indexOf(cmdStartStr, p);       // p0 is the start of the current command
+      boolean shortForm = false;
+      if (shortFormEnabled && p0 != p) {
+         if (p0 == -1) {
+            p0 = templateText.indexOf(cmdStartStrShort, p);
+            shortForm = true; }
+          else {
+            int p2 = templateText.substring(p, p0).indexOf(cmdStartStrShort);
+            if (p2 != -1) {
+               p0 = p + p2;
+               shortForm = true; }}}
+      if (p0 == -1) {                                      // no more commands
          break; }
-      conditionalExclude(p, p0);
-      p = templateText.indexOf("-->", p0);
-      if (p == -1) {
-         throw new MiniTemplator.TemplateSyntaxException("Invalid HTML comment in template at offset " + p0 + "."); }
-      p += 3;
-      String cmdLine = templateText.substring(p0+4, p-3);
-      resumeCmdParsingFromStart = false;
-      processTemplateCommand(cmdLine, p0, p);
-      if (resumeCmdParsingFromStart) {
-         p = p0; }}}
+      conditionalExclude(p, p0);                           // process text up to the start of the current command
+      if (shortForm) {                                     // short form command
+         p = templateText.indexOf(cmdEndStrShort, p0 + cmdStartStrShort.length());
+         if (p == -1) {                                    // if no terminating ">" is found, we process it as normal text
+            p = p0 + cmdStartStrShort.length();
+            conditionalExclude(p0, p);
+            continue; }
+         p += cmdEndStrShort.length();
+         String cmdLine = templateText.substring(p0 + cmdStartStrShort.length(), p - cmdEndStrShort.length());
+         if (!processShortFormTemplateCommand(cmdLine, p0, p)) {
+            // If a short form command is not recognized, we process the whole command structure are normal text.
+            conditionalExclude(p0, p); }}
+       else {                                              // normal (long) form command
+         p = templateText.indexOf(cmdEndStr, p0 + cmdStartStr.length());
+         if (p == -1) {
+            throw new MiniTemplator.TemplateSyntaxException("Invalid HTML comment in template at offset " + p0 + "."); }
+         p += cmdEndStr.length();
+         String cmdLine = templateText.substring(p0 + cmdStartStr.length(), p - cmdEndStr.length());
+         resumeCmdParsingFromStart = false;
+         if (!processTemplateCommand(cmdLine, p0, p)) {
+            conditionalExclude(p0, p); }                   // process as normal temlate text
+         if (resumeCmdParsingFromStart) {                  // (if a subtemplate has been included)
+            p = p0; }}}}
 
-private void processTemplateCommand (String cmdLine, int cmdTPosBegin, int cmdTPosEnd)
+// Returns false if the command should be treatet as normal template text.
+private boolean processTemplateCommand (String cmdLine, int cmdTPosBegin, int cmdTPosEnd)
       throws MiniTemplator.TemplateSyntaxException {
    int p0 = skipBlanks(cmdLine, 0);
    if (p0 >= cmdLine.length()) {
-      return; }
+      return false; }
    int p = skipNonBlanks(cmdLine, p0);
    String cmd = cmdLine.substring(p0, p);
    String parms = cmdLine.substring(p);
@@ -873,7 +926,36 @@ private void processTemplateCommand (String cmdLine, int cmdTPosBegin, int cmdTP
          processEndIfCmd(parms, cmdTPosBegin, cmdTPosEnd); }
       else {
          if (cmd.startsWith("$") && !cmd.startsWith("${")) {
-            throw new MiniTemplator.TemplateSyntaxException("Unknown command \"" + cmd + "\" in template at offset " + cmdTPosBegin + "."); }}}
+            throw new MiniTemplator.TemplateSyntaxException("Unknown command \"" + cmd + "\" in template at offset " + cmdTPosBegin + "."); }
+          else {
+            return false; }}
+   return true; }
+
+// Returns false if the command is not recognized and should be treatet as normal temlate text.
+private boolean processShortFormTemplateCommand (String cmdLine, int cmdTPosBegin, int cmdTPosEnd)
+      throws MiniTemplator.TemplateSyntaxException {
+   int p0 = skipBlanks(cmdLine, 0);
+   if (p0 >= cmdLine.length()) {
+      return false; }
+   int p = p0;
+   char cmd1 = cmdLine.charAt(p++);
+   if (cmd1 == '/' && p < cmdLine.length() && !Character.isWhitespace(cmdLine.charAt(p))) {
+      p++; }
+   String cmd = cmdLine.substring(p0, p);
+   String parms = cmdLine.substring(p).trim();
+   /* select */
+      if (cmd.equals("?")) {
+         processIfCmd(parms, cmdTPosBegin, cmdTPosEnd); }
+      else if (cmd.equals(":")) {
+         if (parms.length() > 0) {
+            processElseIfCmd(parms, cmdTPosBegin, cmdTPosEnd); }
+          else {
+            processElseCmd(parms, cmdTPosBegin, cmdTPosEnd); }}
+      else if (cmd.equals("/?")) {
+         processEndIfCmd(parms, cmdTPosBegin, cmdTPosEnd); }
+      else {
+         return false; }
+   return true; }
 
 // Processes the $beginBlock command.
 private void processBeginBlockCmd (String parms, int cmdTPosBegin, int cmdTPosEnd)
