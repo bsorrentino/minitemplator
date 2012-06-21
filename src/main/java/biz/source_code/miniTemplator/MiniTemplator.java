@@ -12,14 +12,7 @@
 
 package biz.source_code.miniTemplator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -125,17 +118,10 @@ public static class BlockNotDefinedException extends RuntimeException {
 public static class TemplateSpecification {                // template specification
 
    /**
-   * The file name of the template file.
+   * The template URL.
    */
-   public String             templateFileName;
+   public java.net.URL        url;
 
-   /**
-   * The path of the base directory for reading subtemplate files.
-   * This path is used to convert the relative paths of subtemplate files (specified with the $include commands)
-   * into absolute paths.
-   * If this field is null, the parent directory of the main template file (specified by <code>templateFileName</code>) is used.
-   */
-   public String             subtemplateBasePath;
 
    /**
    * The character set to be used for reading and writing files.
@@ -144,13 +130,6 @@ public static class TemplateSpecification {                // template specifica
    * If this field is null, the default charset of the Java VM is used.
    */
    public Charset            charset;
-
-   /**
-   * The contents of the template file.
-   * This field may be used instead of <code>templateFileName</code> to pass the template text in memory.
-   * If this field is not null, <code>templateFileName</code> will be ignored.
-   */
-   public String             templateText;
 
    /**
    * Flags for the conditional commands ($if, $elseIf).
@@ -217,27 +196,32 @@ public MiniTemplator (TemplateSpecification templateSpec)
 * @throws IOException              when an i/o error occurs while reading the template.
 * @see #MiniTemplator(TemplateSpecification)
 */
-public MiniTemplator (String templateFileName)
-      throws IOException, TemplateSyntaxException {
+public MiniTemplator (java.net.URL templateUrl)
+      throws IOException, TemplateSyntaxException 
+{
    TemplateSpecification templateSpec = new TemplateSpecification();
-   templateSpec.templateFileName = templateFileName;
-   init(templateSpec); }
+   templateSpec.url = templateUrl;
+   init(templateSpec); 
+}
 
 private void init (TemplateSpecification templateSpec)
       throws IOException, TemplateSyntaxException {
+    
+   if(templateSpec==null) throw new IllegalArgumentException("templateSpec is null");
+   if(templateSpec.url==null) throw new IllegalArgumentException("templateSpec.url is null");
+    
    charset = templateSpec.charset;
    if (charset == null) {
       charset = Charset.defaultCharset(); }
-   subtemplateBasePath = templateSpec.subtemplateBasePath;
-   if (subtemplateBasePath == null && templateSpec.templateFileName != null) {
-      subtemplateBasePath = new File(templateSpec.templateFileName).getParent(); }
-   String templateText = templateSpec.templateText;
-   if (templateText == null && templateSpec.templateFileName != null) {
-      templateText = readFileIntoString(templateSpec.templateFileName); }
-   if (templateText == null) {
-      throw new IllegalArgumentException("No templateFileName or templateText specified."); }
+
+   final  java.io.InputStream is = templateSpec.url.openStream();
+   
+   final String templateText = readStreamIntoString( new java.io.InputStreamReader(is) );
+   
    mtp = new MiniTemplatorParser(templateText, templateSpec.conditionFlags, templateSpec.shortFormEnabled, this);
-   reset(); }
+   
+   reset(); 
+}
 
 /**
 * Dummy constructor, used internally in newInstance().

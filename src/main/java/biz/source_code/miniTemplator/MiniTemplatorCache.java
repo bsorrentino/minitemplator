@@ -55,12 +55,10 @@ public synchronized MiniTemplator get (MiniTemplator.TemplateSpecification templ
 
 private static String generateCacheKey (MiniTemplator.TemplateSpecification templateSpec) {
    StringBuilder key = new StringBuilder(128);
-   if (templateSpec.templateText != null)
-      key.append(templateSpec.templateText);
-    else if (templateSpec.templateFileName != null)
-      key.append(templateSpec.templateFileName);
+   if (templateSpec.url != null)
+      key.append(templateSpec.url);
     else
-      throw new IllegalArgumentException("No templateFileName or templateText specified.");
+      throw new IllegalArgumentException("No template url specified.");
    if (templateSpec.conditionFlags != null) {
       for (String flag : templateSpec.conditionFlags) {
          key.append('|');
