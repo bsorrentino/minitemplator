@@ -1,14 +1,18 @@
 // A more complex example of how to use the MiniTemplator class.
+package examples;
 
 import biz.source_code.miniTemplator.MiniTemplator;
 
+
 public class Example2 {
 
-private static final String templateFileName = "src/examples/example2-template.html";
-private static final String outputFileName   = "target/examples-output/example2-output.html";
+private static final String templateFileName = "src/test/resources/example2-template.html";
+private static final String outputFileName   = "target/example2-output.html";
 
 public static void main (String args[]) throws Exception {
-   MiniTemplator t = new MiniTemplator(templateFileName);
+   java.io.File f = new java.io.File(templateFileName);
+ 
+   MiniTemplator t = new MiniTemplator(f.toURI().toURL());
    t.setVariable("year", "2003");
    t.setVariable("month", "April");
    for (int weekOfYear=14; weekOfYear<=18; weekOfYear++) {

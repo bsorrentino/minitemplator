@@ -1,14 +1,18 @@
 // A simple example of how to use the MiniTemplator class.
+package examples;
 
 import biz.source_code.miniTemplator.MiniTemplator;
 
 public class Example1 {
 
-private static final String templateFileName = "src/examples/example1-template.html";
-private static final String outputFileName   = "target/examples-output/example1-output.html";
+private static final String templateFileName = "src/test/resources/example1-template.html";
+private static final String outputFileName   = "target/example1-output.html";
 
 public static void main (String args[]) throws Exception {
-   MiniTemplator t = new MiniTemplator(templateFileName);
+    
+   java.io.File f = new java.io.File(templateFileName);
+   
+   MiniTemplator t = new MiniTemplator(f.toURI().toURL());
    t.setVariable("animal1", "fox");
    t.setVariable("animal2", "dog");
    t.addBlock("block1");
