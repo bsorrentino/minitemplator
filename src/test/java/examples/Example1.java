@@ -12,7 +12,7 @@ public static void main (String args[]) throws Exception {
     
    java.io.File f = new java.io.File(templateFileName);
    
-   MiniTemplator t = new MiniTemplator(f.toURI().toURL());
+   MiniTemplator t = new MiniTemplator.Builder().build(f.toURI().toURL());
    t.setVariable("animal1", "fox");
    t.setVariable("animal2", "dog");
    t.addBlock("block1");

@@ -5,7 +5,6 @@
 package examples;
 
 import biz.source_code.miniTemplator.MiniTemplator;
-import java.io.PrintWriter;
 
 /**
  *
@@ -19,10 +18,9 @@ public static void main (String args[]) throws Exception {
     
    java.io.File f = new java.io.File(templateFileName);
    
-   MiniTemplator.TemplateSpecification spec = new MiniTemplator.TemplateSpecification(f.toURI().toURL());
-   spec.skipUndefinedVars = true;
-   
-   MiniTemplator t = new MiniTemplator(spec);
+   MiniTemplator t = new MiniTemplator.Builder()
+                            .setSkipUndefinedVars(true)
+                            .build(f.toURI().toURL());
    t.setVariable("var1", "test");
       
    String txt = t.generateOutput(); 
