@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.bsc</groupId>
+  <groupId>org.bsc.util</groupId>
   <artifactId>minitemplator-repackaged</artifactId>
   <name>MiniTemplator</name>
   <version>1.0-SNAPSHOT</version>
@@ -69,4 +69,34 @@
       </plugin>
     </plugins>
   </build>
+  
+  <distributionManagement>
+  	<repository>
+  		<id>${release.repo.id}</id>
+  		<url>${release.repo.url}</url>
+  	</repository>
+  	<snapshotRepository>
+  		<id>${snapshot.repo.id}</id>
+  		<url>${snapshot.repo.url}</url>
+                <uniqueVersion>false</uniqueVersion>
+  	</snapshotRepository>
+      <site>
+        <id>${release.site.id}</id>
+        <url>${release.site.url}</url>
+      </site>
+  </distributionManagement>
+
+  <properties>
+    <!-- SONATYPE REPO -->
+        <snapshot.repo.id>sonatype-repo</snapshot.repo.id>
+        <snapshot.repo.url>https://oss.sonatype.org/content/repositories/snapshots</snapshot.repo.url>
+        <release.repo.id>sonatype-repo</release.repo.id>
+        <release.repo.url>https://oss.sonatype.org/service/local/staging/deploy/maven2</release.repo.url>
+
+    <!-- DOCUMENTATION
+        <release.site.url></release.site.url>
+        <release.site.id></release.site.id>
+     -->
+  </properties>
+  
 </project>
