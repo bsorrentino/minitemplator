@@ -1,11 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>biz.source_code</groupId>
-  <artifactId>minitemplator</artifactId>
+  <groupId>org.bsc</groupId>
+  <artifactId>minitemplator-repackaged</artifactId>
   <name>MiniTemplator</name>
-  <version>2010-02-19</version>
+  <version>1.0-SNAPSHOT</version>
   <description>MiniTemplator is a compact template engine for HTML files.</description>
   <url>http://www.source-code.biz/MiniTemplator</url>
+  
+  <inceptionYear>2010</inceptionYear>
   <developers>
     <developer>
       <name>Christian d'Heureuse</name>
@@ -32,8 +34,9 @@
     </contributor>
   </contributors>
   <scm>
-    <developerConnection>scm:svn:http://svn.source-code.biz/minitemplator-java/trunk</developerConnection>
-    <url>http://svn.source-code.biz/viewvc/minitemplator-java/trunk</url>
+    <connection>scm:git:https://github.com/bsorrentino/minitemplator.git</connection>  
+    <developerConnection>scm:git:https://github.com/bsorrentino/minitemplator.git</developerConnection>
+    <url>https://github.com/bsorrentino/minitemplator.git</url>
   </scm>
   <organization>
     <name>source-code.biz</name>
