@@ -31,11 +31,9 @@
 
 # Why use MiniTemplator?
 
-> What is special about MiniTemplator, compared to other template engines?
-* There are other template engines (like Velocity, WebMacro or Smarty) which are huge and use complex template syntaxes. These template syntaxes are so complex that they are almost like new programming languages. MiniTemplator however uses a very simple template syntax. All processing (loops, if-then-else logic) and variable formatting is done in application program code (Java/PHP/VB), which leads to better separation of layout and code, and no new complex syntax has to be learned.
+> * There are other template engines (like Velocity, WebMacro or Smarty) which are huge and use complex template syntaxes. These template syntaxes are so complex that they are almost like new programming languages. MiniTemplator however uses a very simple template syntax. All processing (loops, if-then-else logic) and variable formatting is done in application program code (Java/PHP/VB), which leads to better separation of layout and code, and no new complex syntax has to be learned.
 * There are simple template engines which do not provide elementary features (like nested blocks, loading the template from a string, or storing the output into a string variable), or are slow. MiniTemplator provides these elementary features and is fast, because the template is only parsed once (at the time it is loaded).
 * MiniTemplator provides the features to build professional web applications, and it is compact and fits within a single code module.
-* MiniTemplator Template Syntax
 
 # Syntax
 
