@@ -37,19 +37,14 @@ What is special about MiniTemplator, compared to other template engines?
 A simple syntax is used to define variables and blocks within the template. This syntax is compatible with HTML editors like FrontPage, but it can also be used for non-HTML files.
 
 ## Variables:
-<pre><code>
-${VariableName}
-</code></pre>
-## Blocks:
+<pre><code>${VariableName}</code></pre>
 
+## Blocks:
 <pre><code>
-<!-- $BeginBlock BlockName -->
+&lt;!-- $BeginBlock BlockName --&gt;
  ... block content ...
-<!-- $EndBlock BlockName -->
+&lt;!-- $EndBlock BlockName --&gt;
 </code></pre>
 
 ## Include a subtemplate:
-
-<pre><code>
-<!-- $Include RelativeFileName -->
-</code></pre>
+<pre><code>&lt;!-- $Include RelativeFileName --&gt;</code></pre>
