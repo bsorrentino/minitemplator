@@ -1,6 +1,6 @@
 # MiniTemplator
 
-MiniTemplator is a compact template engine for HTML files.
+MiniTemplator is a compact template engine.
 
 # Features
 
