@@ -9,6 +9,14 @@ MiniTemplator is a compact template engine for HTML files.
 * Compact, well-documented source code. A single code module.
 * Documentation and sample programs available.
 * Open Source, licensed under the <a href="http://www.gnu.org/licenses/lgpl.html">GNU LGPL</a> & <a href="http://www.eclipse.org/legal">EPL</a>. It may be used freely, even for commercial projects (<a href="http://en.wikipedia.org/wiki/LGPL">Details</a>).
+* Available as maven dependency from <a href="http://search.maven.org/#artifactdetails%7Corg.bsc.util%7Cminitemplator-repackaged%7C1.0%7Cmaven-plugin">CENTRAL</a>
+<pre>
+&lt;dependency>
+        &lt;groupId>org.bsc.util&lt;/groupId>
+        &lt;artifactId>minitemplator-repackaged&lt;/artifactId>
+        &lt;version>1.0&lt;/version>
+&lt;/dependency>
+</pre>
 
 # What is a Template Engine?
 
