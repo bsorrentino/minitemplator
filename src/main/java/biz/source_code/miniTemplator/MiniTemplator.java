@@ -124,7 +124,7 @@ public static class Builder {                // template specification
          * {@link #generateOutput(String outputFileName)}. If this field is
          * null, the default charset of the Java VM is used.
          */
-        private Charset charset = Charset.defaultCharset();
+        private Charset charset = null;
         /**
          * Flags for the conditional commands ($if, $elseIf). A set of flag
          * names, that can be used with the $if and $elseIf commands. The flag
@@ -232,9 +232,9 @@ private void init( Builder builder, java.io.Reader content )
     
    this.skipUndefinedVars = builder.skipUndefinedVars;
    
-   charset = builder.charset;
-   if (charset == null) {
-      charset = Charset.defaultCharset(); }
+   charset = ( builder.charset == null ) ? 
+           Charset.defaultCharset() : 
+           builder.charset;
 
    try {
     final String templateText = readStreamIntoString( content );
@@ -269,6 +269,7 @@ protected MiniTemplator() {}
 *        This is the argument string that was specified with the "$Include" command.
 *        If the string has quotes, the quotes are removed before this method is called.
 * @return the template text string of the subtemplate.
+* @throws java.io.IOException
 */
 protected String loadSubtemplate (String subtemplateName) throws IOException {
    String fileName = new File(subtemplateBasePath, subtemplateName).getPath();
@@ -309,6 +310,8 @@ public void reset() {
 * information are shared among the clones.
 * <p>This method is used by the {@link MiniTemplatorCache} class to
 * clone the cached MiniTemplator objects.
+* 
+* @return itself (fluent api) 
 */
 public MiniTemplator cloneReset() {
    MiniTemplator m = new MiniTemplator();
@@ -553,7 +556,7 @@ public void generateOutput (String outputFileName)
    OutputStreamWriter writer = null;
    try {
       stream = new FileOutputStream(outputFileName);
-      writer = new OutputStreamWriter(stream, charset);
+      writer = new OutputStreamWriter(stream);
       generateOutput(writer); }
     finally {
       if (writer != null) {
@@ -584,7 +587,8 @@ public String generateOutput() {
       bdtr.currBlockInstNo = bdtr.firstBlockInstNo; }
    StringBuilder out = new StringBuilder();
    writeBlockInstances(out, 0, -1);
-   return out.toString(); }
+   return new String( out.toString().getBytes(charset) );
+}
 
 // Writes all instances of a block that are contained within a specific
 // parent block instance.
