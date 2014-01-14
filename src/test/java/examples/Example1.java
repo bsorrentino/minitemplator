@@ -2,6 +2,7 @@
 package examples;
 
 import biz.source_code.miniTemplator.MiniTemplator;
+import java.nio.charset.Charset;
 
 public class Example1 {
 
@@ -12,7 +13,8 @@ public static void main (String args[]) throws Exception {
     
    java.io.File f = new java.io.File(templateFileName);
    
-   MiniTemplator t = new MiniTemplator.Builder().build(f.toURI().toURL());
+   MiniTemplator t = new MiniTemplator.Builder()
+                            .build(f.toURI().toURL(), Charset.defaultCharset());
    t.setVariable("animal1", "fox");
    t.setVariable("animal2", "dog");
    t.addBlock("block1");

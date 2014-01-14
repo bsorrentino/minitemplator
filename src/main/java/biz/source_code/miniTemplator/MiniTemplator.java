@@ -82,6 +82,7 @@ public class MiniTemplator {
 
 //--- exceptions -----------------------------------------------------
 
+    
 /**
 * Thrown when a syntax error is encountered within the template.
 */
@@ -118,14 +119,6 @@ public static class BlockNotDefinedException extends RuntimeException {
 public static class Builder {                // template specification
 
         /**
-         * The character set to be used for reading and writing files. This
-         * charset is used for reading the template and subtemplate files and
-         * for writing output with
-         * {@link #generateOutput(String outputFileName)}. If this field is
-         * null, the default charset of the Java VM is used.
-         */
-        private Charset charset = null;
-        /**
          * Flags for the conditional commands ($if, $elseIf). A set of flag
          * names, that can be used with the $if and $elseIf commands. The flag
          * names are case-insensitive.
@@ -141,11 +134,6 @@ public static class Builder {                // template specification
         private boolean skipUndefinedVars = false;
 
         
-        public Builder setCharset(Charset charset) {
-            this.charset = charset;
-            return this;
-        }
-
         public Builder setConditionFlags(Set<String> conditionFlags) {
             this.conditionFlags = conditionFlags;
             return this;
@@ -162,16 +150,13 @@ public static class Builder {                // template specification
         }
 
            
-        public final MiniTemplator build( java.io.Reader content ) throws IOException {
+        public final MiniTemplator build( java.io.InputStream content, Charset charset ) throws IOException {
             MiniTemplator result = new MiniTemplator();
-            result.init(this, content);
+            result.init(this, new java.io.InputStreamReader(content, charset), charset);
             return result;
-        }  
-        
-        public final MiniTemplator build( java.net.URL url ) throws IOException {
-            MiniTemplator result = new MiniTemplator();
-            result.init(this, new java.io.InputStreamReader( url.openStream()));
-            return result;
+        }     
+        public final MiniTemplator build( java.net.URL url, Charset charset ) throws IOException {
+            return this.build( url.openStream(), charset );
         }     
     }
 
@@ -219,7 +204,7 @@ private boolean              skipUndefinedVars;
 * @see #MiniTemplator(TemplateSpecification)
 */
 
-private void init( Builder builder, java.io.Reader content )
+private void init( Builder builder, java.io.Reader content, Charset charset )
       throws IOException, TemplateSyntaxException {
     
    if(builder==null) {
@@ -229,12 +214,14 @@ private void init( Builder builder, java.io.Reader content )
    if(content==null) {
        throw new IllegalArgumentException("templateSpec.uri is null");
    }
+
+   if(charset==null) {
+       throw new IllegalArgumentException("charset is null");
+   }
     
    this.skipUndefinedVars = builder.skipUndefinedVars;
    
-   charset = ( builder.charset == null ) ? 
-           Charset.defaultCharset() : 
-           builder.charset;
+   this.charset = charset ;
 
    try {
     final String templateText = readStreamIntoString( content );
@@ -253,7 +240,6 @@ private void init( Builder builder, java.io.Reader content )
 */
 protected MiniTemplator() {}
 
-
 //--- loadSubtemplate ------------------------------------------------
 
 /**
@@ -269,7 +255,6 @@ protected MiniTemplator() {}
 *        This is the argument string that was specified with the "$Include" command.
 *        If the string has quotes, the quotes are removed before this method is called.
 * @return the template text string of the subtemplate.
-* @throws java.io.IOException
 */
 protected String loadSubtemplate (String subtemplateName) throws IOException {
    String fileName = new File(subtemplateBasePath, subtemplateName).getPath();
@@ -309,9 +294,8 @@ public void reset() {
 * and the internal data structures that contain the parsed template
 * information are shared among the clones.
 * <p>This method is used by the {@link MiniTemplatorCache} class to
-* clone the cached MiniTemplator objects.
-* 
-* @return itself (fluent api) 
+* clone the cached MiniTemplator objects.     
+* @return 
 */
 public MiniTemplator cloneReset() {
    MiniTemplator m = new MiniTemplator();
@@ -319,8 +303,7 @@ public MiniTemplator cloneReset() {
    m.charset = charset;
    // (subtemplateBasePath does not have to be copied, because the subtemplates have already been read)
    m.reset();
-   return m; 
-}
+   return m; }
 
 /**
 * Sets a template variable.
@@ -556,7 +539,7 @@ public void generateOutput (String outputFileName)
    OutputStreamWriter writer = null;
    try {
       stream = new FileOutputStream(outputFileName);
-      writer = new OutputStreamWriter(stream);
+      writer = new OutputStreamWriter(stream, charset);
       generateOutput(writer); }
     finally {
       if (writer != null) {
@@ -570,10 +553,10 @@ public void generateOutput (String outputFileName)
 *    the HTML page will be written.
 * @throws IOException when an i/o error occurs while writing to the stream.
 */
-public void generateOutput (Writer outputWriter)
-      throws IOException {
+public void generateOutput(Writer outputWriter) throws IOException {
    String s = generateOutput();
-   outputWriter.write(s); }
+   outputWriter.write( s ); 
+}
 
 /**
 * Generates the HTML page and returns it as a string.
@@ -587,7 +570,7 @@ public String generateOutput() {
       bdtr.currBlockInstNo = bdtr.firstBlockInstNo; }
    StringBuilder out = new StringBuilder();
    writeBlockInstances(out, 0, -1);
-   return new String( out.toString().getBytes(charset) );
+   return out.toString(); 
 }
 
 // Writes all instances of a block that are contained within a specific
@@ -681,7 +664,7 @@ private String readFileIntoString (String fileName)
          stream.close(); }}}
 
 // Reads the contents of a stream into a string variable.
-private static String readStreamIntoString (Reader reader)
+private String readStreamIntoString (Reader reader)
       throws IOException {
    StringBuilder s = new StringBuilder();
    char a[] = new char[0x10000];

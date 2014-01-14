@@ -5,6 +5,7 @@
 package examples;
 
 import biz.source_code.miniTemplator.MiniTemplator;
+import java.nio.charset.Charset;
 
 /**
  *
@@ -20,7 +21,7 @@ public static void main (String args[]) throws Exception {
    
    MiniTemplator t = new MiniTemplator.Builder()
                             .setSkipUndefinedVars(true)
-                            .build(f.toURI().toURL());
+                            .build(f.toURI().toURL(), Charset.defaultCharset());
    t.setVariable("var1", "test");
       
    String txt = t.generateOutput(); 

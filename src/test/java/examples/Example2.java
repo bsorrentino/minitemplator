@@ -2,6 +2,7 @@
 package examples;
 
 import biz.source_code.miniTemplator.MiniTemplator;
+import java.nio.charset.Charset;
 
 
 public class Example2 {
@@ -12,7 +13,8 @@ private static final String outputFileName   = "target/example2-output.html";
 public static void main (String args[]) throws Exception {
    java.io.File f = new java.io.File(templateFileName);
  
-   MiniTemplator t = new MiniTemplator.Builder().build(f.toURI().toURL());
+   MiniTemplator t = new MiniTemplator.Builder()
+                    .build(f.toURI().toURL(), Charset.defaultCharset());
    t.setVariable("year", "2003");
    t.setVariable("month", "April");
    for (int weekOfYear=14; weekOfYear<=18; weekOfYear++) {
