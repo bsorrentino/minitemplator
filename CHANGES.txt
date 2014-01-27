@@ -2,6 +2,10 @@
 MiniTemplator Changes (Java version)
 ------------------------------------
 
+see 
+commits: https://github.com/bsorrentino/minitemplator/commits/master
+issues: https://github.com/bsorrentino/minitemplator/issues
+
 2011-11-27 chdh
 Short form syntax added for conditional blocks.
 
