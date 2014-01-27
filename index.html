@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Minitemplator : MiniTemplator is a compact template engine for HTML files. (fork of http://www.source-code.biz/MiniTemplator/)" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Minitemplator</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/bsorrentino/minitemplator">View on GitHub</a>
+
+          <h1 id="project_title">Minitemplator</h1>
+          <h2 id="project_tagline">MiniTemplator is a compact template engine for HTML files. (fork of http://www.source-code.biz/MiniTemplator/)</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/bsorrentino/minitemplator/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/bsorrentino/minitemplator/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="minitemplator" class="anchor" href="#minitemplator"><span class="octicon octicon-link"></span></a>MiniTemplator</h1>
+
+<blockquote>
+<p>MiniTemplator is a java compact template engine.</p>
+</blockquote>
+
+<h1>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h1>
+
+<blockquote>
+<ul>
+<li>Simple syntax for template variables and blocks.</li>
+<li>Blocks can be nested.</li>
+<li>Compact, well-documented source code. A single code module.</li>
+<li>Documentation and sample programs available.</li>
+<li>Open Source, licensed under the <a href="http://www.gnu.org/licenses/lgpl.html">GNU LGPL</a> &amp; <a href="http://www.eclipse.org/legal">EPL</a>. It may be used freely, even for commercial projects (<a href="http://en.wikipedia.org/wiki/LGPL">Details</a>).</li>
+<li>Available as maven dependency from <a href="http://search.maven.org/#artifactdetails%7Corg.bsc.util%7Cminitemplator-repackaged%7C1.0%7Cmaven-plugin">CENTRAL</a>
+<pre>
+&lt;dependency&gt;
+    &lt;groupId&gt;org.bsc.util&lt;/groupId&gt;
+    &lt;artifactId&gt;minitemplator-repackaged&lt;/artifactId&gt;
+    &lt;version&gt;1.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+</li>
+</ul>
+</blockquote>
+
+<h1>
+<a name="what-is-a-template-engine" class="anchor" href="#what-is-a-template-engine"><span class="octicon octicon-link"></span></a>What is a Template Engine?</h1>
+
+<blockquote>
+<p>A template engine is a software module which is used to generate HTML pages (or other text files). The layout of a HTML page is defined within a template file, which can be designed by using a standard HTML editor like FrontPage. At run-time, the application program instructs the template engine to load the template, fill in variable values, repeat blocks and produce the final HTML page.</p>
+</blockquote>
+
+<h1>
+<a name="why-use-a-template-engine" class="anchor" href="#why-use-a-template-engine"><span class="octicon octicon-link"></span></a>Why use a Template Engine?</h1>
+
+<blockquote>
+<p>The advantage of using a template engine, instead of embedding program code and HTML code, is:</p>
+
+<ul>
+<li>Program code and web page layout are separated and can be designed and modified independently.</li>
+<li>A software developer and a web page designer can work together without interfering in each others work. Responsibilities can be split.</li>
+<li>After the program has been finished, the page layout can be modified at a later time, without having to modify the program code.</li>
+<li>Templates are useful when web pages will be translated, and multiple languages must be supported by the same program.</li>
+</ul>
+</blockquote>
+
+<h1>
+<a name="why-use-minitemplator" class="anchor" href="#why-use-minitemplator"><span class="octicon octicon-link"></span></a>Why use MiniTemplator?</h1>
+
+<blockquote>
+<ul>
+<li>There are other template engines (like Velocity, WebMacro or Smarty) which are huge and use complex template syntaxes. These template syntaxes are so complex that they are almost like new programming languages. MiniTemplator however uses a very simple template syntax. All processing (loops, if-then-else logic) and variable formatting is done in application program code (Java/PHP/VB), which leads to better separation of layout and code, and no new complex syntax has to be learned.</li>
+<li>There are simple template engines which do not provide elementary features (like nested blocks, loading the template from a string, or storing the output into a string variable), or are slow. MiniTemplator provides these elementary features and is fast, because the template is only parsed once (at the time it is loaded).</li>
+<li>MiniTemplator provides the features to build professional web applications, and it is compact and fits within a single code module.</li>
+</ul>
+</blockquote>
+
+<h1>
+<a name="syntax" class="anchor" href="#syntax"><span class="octicon octicon-link"></span></a>Syntax</h1>
+
+<blockquote>
+<p>A simple syntax is used to define variables and blocks within the template. This syntax is compatible with HTML editors like FrontPage, but it can also be used for non-HTML files.</p>
+</blockquote>
+
+<h2>
+<a name="variables" class="anchor" href="#variables"><span class="octicon octicon-link"></span></a>Variables:</h2>
+
+<pre><code>${VariableName}</code></pre>
+
+<h2>
+<a name="blocks" class="anchor" href="#blocks"><span class="octicon octicon-link"></span></a>Blocks:</h2>
+
+<pre><code>
+&lt;!-- $BeginBlock BlockName --&gt;
+ ... block content ...
+&lt;!-- $EndBlock BlockName --&gt;
+</code></pre>
+
+<h2>
+<a name="include-a-subtemplate" class="anchor" href="#include-a-subtemplate"><span class="octicon octicon-link"></span></a>Include a subtemplate:</h2>
+
+<pre><code>&lt;!-- $Include RelativeFileName --&gt;</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Minitemplator maintained by <a href="https://github.com/bsorrentino">bsorrentino</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
