@@ -29,11 +29,12 @@ public class Issue3Test {
 
         final MiniTemplator t = new MiniTemplator.Builder()
                                  .build(f.toURI().toURL(), Charset.defaultCharset());
-        t.setVariable("test", "test1");
+        t.setVariableOpt("test", "test1");
 
 
         final String out = t.generateOutput(); 
-                
-        Assert.assertThat(out, IsEqual.equalTo("${test}"));
+            
+        final String lines[] = out.split("\n");
+        Assert.assertThat(lines[0], IsEqual.equalTo("$\\{test}"));
     }
 }

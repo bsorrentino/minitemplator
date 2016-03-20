@@ -13,6 +13,8 @@
 package biz.source_code.miniTemplator;
 
 import biz.source_code.miniTemplator.MiniTemplator.TemplateSyntaxException;
+import biz.source_code.miniTemplator.MiniTemplatorParser.BlockTabRec;
+import biz.source_code.miniTemplator.MiniTemplatorParser.VarRefTabRec;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -596,41 +598,51 @@ private void writeBlockInstances (StringBuilder out, int blockNo, int parentInst
       bdtr.currBlockInstNo = bitr.nextBlockInstNo; }}
 
 private void writeBlockInstance (StringBuilder out, int blockInstNo) {
-   BlockInstTabRec bitr = blockInstTab[blockInstNo];
+   final BlockInstTabRec bitr = blockInstTab[blockInstNo];
    int blockNo = bitr.blockNo;
-   MiniTemplatorParser.BlockTabRec btr = mtp.blockTab[blockNo];
+   final BlockTabRec btr = mtp.blockTab[blockNo];
    int tPos = btr.tPosContentsBegin;
    int subBlockNo = blockNo + 1;
    int varRefNo = btr.firstVarRefNo;
+
    while (true) {
       int tPos2 = btr.tPosContentsEnd;
       int kind = 0;                              // assume end-of-block
       if (varRefNo != -1 && varRefNo < mtp.varRefTabCnt) { // check for variable reference
-         MiniTemplatorParser.VarRefTabRec vrtr = mtp.varRefTab[varRefNo];
+         final VarRefTabRec vrtr = mtp.varRefTab[varRefNo];
          if (vrtr.tPosBegin < tPos) {
             varRefNo++;
-            continue; }
+            continue; 
+         }
          if (vrtr.tPosBegin < tPos2) {
             tPos2 = vrtr.tPosBegin;
-            kind = 1; }}
+            kind = 1; 
+         }
+      }
       if (subBlockNo < mtp.blockTabCnt) {        // check for subblock
-         MiniTemplatorParser.BlockTabRec subBtr = mtp.blockTab[subBlockNo];
+         final BlockTabRec subBtr = mtp.blockTab[subBlockNo];
          if (subBtr.tPosBegin < tPos) {
             subBlockNo++;
-            continue; }
+            continue; 
+         }
          if (subBtr.tPosBegin < tPos2) {
             tPos2 = subBtr.tPosBegin;
-            kind = 2; }}
+            kind = 2; 
+         }
+      }
       if (tPos2 > tPos) {
-         out.append(mtp.templateText.substring(tPos, tPos2)); }
+            final String text = mtp.templateText.substring(tPos, tPos2);
+            out.append(text); 
+      }
       switch (kind) {
          case 0:                                 // end of block
             return;
          case 1: {                               // variable
-            MiniTemplatorParser.VarRefTabRec vrtr = mtp.varRefTab[varRefNo];
+            final VarRefTabRec vrtr = mtp.varRefTab[varRefNo];
             if (vrtr.blockNo != blockNo) {
-               throw new AssertionError(); }
-            String variableValue = bitr.blockVarTab[vrtr.blockVarNo];
+               throw new AssertionError(); 
+            }
+            final String variableValue = bitr.blockVarTab[vrtr.blockVarNo];
             if (variableValue != null) {
                out.append(variableValue); 
             }
@@ -641,15 +653,21 @@ private void writeBlockInstance (StringBuilder out, int blockInstNo) {
                 tPos = vrtr.tPosEnd;             
             }
             varRefNo++;
-            break; }
+            break; 
+         }
          case 2: {                               // sub block
             MiniTemplatorParser.BlockTabRec subBtr = mtp.blockTab[subBlockNo];
             if (subBtr.parentBlockNo != blockNo) {
-               throw new AssertionError(); }
+               throw new AssertionError(); 
+            }
             writeBlockInstances(out, subBlockNo, bitr.instanceLevel);  // recursive call
             tPos = subBtr.tPosEnd;
             subBlockNo++;
-            break; }}}}
+            break; 
+         }
+      }
+   }
+}
 
 //--- general utility routines ---------------------------------------
 
@@ -792,7 +810,7 @@ private boolean              resumeCmdParsingFromStart;    // true = resume comm
 // (The MiniTemplator object is only passed to the parser, because the
 // parser needs to call MiniTemplator.loadSubtemplate() to load subtemplates.)
 public MiniTemplatorParser (String templateText, Set<String> conditionFlags, boolean shortFormEnabled, MiniTemplator miniTemplator)
-      throws MiniTemplator.TemplateSyntaxException {
+      throws TemplateSyntaxException {
    this.templateText = templateText;
    this.conditionFlags = createConditionFlagsSet(conditionFlags);
    this.shortFormEnabled = shortFormEnabled;
@@ -850,7 +868,8 @@ private void beginMainBlock() {
    btr.tPosBegin = 0;
    btr.tPosContentsBegin = 0;
    openBlocksTab[currentNestingLevel] = blockNo;
-   currentNestingLevel++; }
+   currentNestingLevel++; 
+}
 
 // Completes the main block registration.
 private void endMainBlock() {
@@ -858,7 +877,8 @@ private void endMainBlock() {
    btr.tPosContentsEnd = templateText.length();
    btr.tPosEnd = templateText.length();
    btr.definitionIsOpen = false;
-   currentNestingLevel--; }
+   currentNestingLevel--; 
+}
 
 //--- Template commands --------------------------------------------------------
 
@@ -1222,41 +1242,48 @@ private void parseTemplateVariables() throws TemplateSyntaxException {
    while (true) {
       p = templateText.indexOf("${", p);
       if (p == -1) {
-         break; }
+         break; 
+      }
       int p0 = p;
       p = templateText.indexOf("}", p);
       if (p == -1) {
-         throw new TemplateSyntaxException("Invalid variable reference in template at offset " + p0 + "."); }
+         throw new TemplateSyntaxException(format("Invalid variable reference in template at offset %d.", p0)); 
+      }
       p++;
       String varName = templateText.substring(p0+2, p-1).trim();
       if (varName.length() == 0) {
-         throw new TemplateSyntaxException("Empty variable name in template at offset " + p0 + "."); 
+         throw new TemplateSyntaxException(format("Empty variable name in template at offset %d.",p0)); 
       }
-      registerVariableReference(varName, p0, p); }
+      registerVariableReference(varName, p0, p); 
+   }
 }
 
 private void registerVariableReference (String varName, int tPosBegin, int tPosEnd) {
-   int varNo;
-   varNo = lookupVariableName(varName);
+   int varNo = lookupVariableName(varName);
    if (varNo == -1) {
-      varNo = registerVariable(varName); }
+      varNo = registerVariable(varName); 
+   }
    int varRefNo = varRefTabCnt++;
    if (varRefTabCnt > varRefTab.length) {
-      varRefTab = (VarRefTabRec[])resizeArray(varRefTab, 2*varRefTabCnt); }
-   VarRefTabRec vrtr = new VarRefTabRec();
+      varRefTab = (VarRefTabRec[])resizeArray(varRefTab, 2*varRefTabCnt); 
+   }
+   final VarRefTabRec vrtr = new VarRefTabRec();
    varRefTab[varRefNo] = vrtr;
    vrtr.tPosBegin = tPosBegin;
    vrtr.tPosEnd = tPosEnd;
-   vrtr.varNo = varNo; }
+   vrtr.varNo = varNo; 
+}
 
 // Returns the variable number of the newly registered variable.
 private int registerVariable (String varName) {
    int varNo = varTabCnt++;
    if (varTabCnt > varTab.length) {
-      varTab = (String[])resizeArray(varTab, 2*varTabCnt); }
+      varTab = (String[])resizeArray(varTab, 2*varTabCnt); 
+   }
    varTab[varNo] = varName;
-   varNameToNoMap.put(varName.toUpperCase(), new Integer(varNo));
-   return varNo; }
+   varNameToNoMap.put(varName.toUpperCase(), varNo);
+   return varNo; 
+}
 
 //--- name lookup routines -------------------------------------------
 
