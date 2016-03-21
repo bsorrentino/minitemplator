@@ -12,12 +12,16 @@
 
 package biz.source_code.miniTemplator;
 
+import biz.source_code.miniTemplator.MiniTemplator.TemplateSyntaxException;
+import biz.source_code.miniTemplator.MiniTemplatorParser.BlockTabRec;
+import biz.source_code.miniTemplator.MiniTemplatorParser.VarRefTabRec;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import static java.lang.String.format;
 
 /**
 * A compact template engine for HTML files.
@@ -88,8 +92,11 @@ public class MiniTemplator {
 */
 public static class TemplateSyntaxException extends RuntimeException {
    private static final long serialVersionUID = 1;
+   
    public TemplateSyntaxException (String msg) {
-      super("Syntax error in template: " + msg); }}
+      super(format("Syntax error in template: %s", msg)); 
+   }
+}
 
 /**
 * Thrown when {@link MiniTemplator#setVariable(String, String, boolean) Minitemplator.setVariable}
@@ -98,8 +105,11 @@ public static class TemplateSyntaxException extends RuntimeException {
 */
 public static class VariableNotDefinedException extends RuntimeException {
    private static final long serialVersionUID = 1;
+   
    public VariableNotDefinedException (String variableName) {
-      super("Variable \"" + variableName + "\" not defined in template."); }}
+      super(format("Variable '%s' not defined in template.", variableName)); 
+   }
+}
 
 /**
 * Thrown when {@link MiniTemplator#addBlock Minitemplator.addBlock}
@@ -108,8 +118,11 @@ public static class VariableNotDefinedException extends RuntimeException {
 */
 public static class BlockNotDefinedException extends RuntimeException {
    private static final long serialVersionUID = 1;
+   
    public BlockNotDefinedException (String blockName) {
-      super("Block \"" + blockName + "\" not defined in template."); }}
+      super(format("Block '%s' not defined in template.", blockName)); 
+   }
+}
 
 //--- public nested classes ------------------------------------------
 
@@ -166,7 +179,9 @@ private static class BlockDynTabRec {                      // block dynamic data
    int                       instances;                    // number of instances of this block
    int                       firstBlockInstNo;             // block instance no of first instance of this block or -1
    int                       lastBlockInstNo;              // block instance no of last instance of this block or -1
-   int                       currBlockInstNo; }            // current block instance no, used during generation of output file
+   int                       currBlockInstNo;              // current block instance no, used during generation of output file
+}
+
 private static class BlockInstTabRec {                     // block instance table record structure
    int                       blockNo;                      // block number
    int                       instanceLevel;                // instance level of this block
@@ -175,7 +190,8 @@ private static class BlockInstTabRec {                     // block instance tab
    int                       parentInstLevel;              // instance level of parent block
    int                       nextBlockInstNo;              // pointer to next instance of this block or -1
       // Forward chain for instances of same block.
-   String[]                  blockVarTab; }                // block instance variables
+   String[]                  blockVarTab;                  // block instance variables
+}
 
 //--- private variables ----------------------------------------------
 
@@ -226,7 +242,10 @@ private void init( Builder builder, java.io.Reader content, Charset charset )
    try {
     final String templateText = readStreamIntoString( content );
 
-    mtp = new MiniTemplatorParser(templateText, builder.conditionFlags, builder.shortFormEnabled, this);
+    mtp = new MiniTemplatorParser(  templateText, 
+                                    builder.conditionFlags, 
+                                    builder.shortFormEnabled, 
+                                    this);
 
     reset(); 
    }
@@ -258,7 +277,8 @@ protected MiniTemplator() {}
 */
 protected String loadSubtemplate (String subtemplateName) throws IOException {
    String fileName = new File(subtemplateBasePath, subtemplateName).getPath();
-   return readFileIntoString(fileName); }
+   return readFileIntoString(fileName); 
+}
 
 //--- build up (template variables and blocks) ------------------------
 
@@ -271,21 +291,28 @@ protected String loadSubtemplate (String subtemplateName) throws IOException {
 */
 public void reset() {
    if (varValuesTab == null) {
-      varValuesTab = new String[mtp.varTabCnt]; }
-    else {
+      varValuesTab = new String[mtp.varTabCnt]; 
+   }
+   else {
       for (int varNo=0; varNo<mtp.varTabCnt; varNo++) {
-         varValuesTab[varNo] = null; }}
+         varValuesTab[varNo] = null; 
+      }
+   }
    if (blockDynTab == null) {
-      blockDynTab = new BlockDynTabRec[mtp.blockTabCnt]; }
+      blockDynTab = new BlockDynTabRec[mtp.blockTabCnt]; 
+   }
    for (int blockNo=0; blockNo<mtp.blockTabCnt; blockNo++) {
       BlockDynTabRec bdtr = blockDynTab[blockNo];
       if (bdtr == null) {
          bdtr = new BlockDynTabRec();
-         blockDynTab[blockNo] = bdtr; }
+         blockDynTab[blockNo] = bdtr; 
+      }
       bdtr.instances = 0;
       bdtr.firstBlockInstNo = -1;
-      bdtr.lastBlockInstNo = -1; }
-   blockInstTabCnt = 0; }
+      bdtr.lastBlockInstNo = -1; 
+   }
+   blockInstTabCnt = 0; 
+}
 
 /**
 * Clones this MiniTemplator object and resets the clone.
@@ -303,7 +330,8 @@ public MiniTemplator cloneReset() {
    m.charset = charset;
    // (subtemplateBasePath does not have to be copied, because the subtemplates have already been read)
    m.reset();
-   return m; }
+   return m; 
+}
 
 /**
 * Sets a template variable.
@@ -322,9 +350,12 @@ public void setVariable (String variableName, String variableValue, boolean isOp
    int varNo = mtp.lookupVariableName(variableName);
    if (varNo == -1) {
       if (isOptional) {
-         return; }
-      throw new VariableNotDefinedException(variableName); }
-   varValuesTab[varNo] = variableValue; }
+         return; 
+      }
+      throw new VariableNotDefinedException(variableName); 
+   }
+   varValuesTab[varNo] = variableValue; 
+}
 
 /**
 * Sets a template variable.
@@ -337,7 +368,8 @@ public void setVariable (String variableName, String variableValue, boolean isOp
 */
 public void setVariable (String variableName, String variableValue)
       throws VariableNotDefinedException {
-   setVariable(variableName, variableValue, false); }
+   setVariable(variableName, variableValue, false); 
+}
 
 /**
 * Sets a template variable to an integer value.
@@ -349,7 +381,8 @@ public void setVariable (String variableName, String variableValue)
 */
 public void setVariable (String variableName, int variableValue)
       throws VariableNotDefinedException {
-   setVariable(variableName, Integer.toString(variableValue)); }
+   setVariable(variableName, Integer.toString(variableValue)); 
+}
 
 /**
 * Sets an optional template variable.
@@ -359,7 +392,8 @@ public void setVariable (String variableName, int variableValue)
 * @see #setVariable(String, String, boolean)
 */
 public void setVariableOpt (String variableName, String variableValue) {
-   setVariable(variableName, variableValue, true); }
+   setVariable(variableName, variableValue, true); 
+}
 
 /**
 * Sets an optional template variable to an integer value.
@@ -371,8 +405,10 @@ public void setVariableOpt (String variableName, int variableValue) {
    // We want to avoid the integer to string conversion if the template variable does not exist.
    int varNo = mtp.lookupVariableName(variableName);
    if (varNo == -1) {
-      return; }
-   varValuesTab[varNo] = Integer.toString(variableValue); }
+      return; 
+   }
+   varValuesTab[varNo] = Integer.toString(variableValue); 
+}
 
 /**
 * Sets a template variable to an escaped value.
@@ -390,7 +426,8 @@ public void setVariableOpt (String variableName, int variableValue) {
 */
 public void setVariableEsc (String variableName, String variableValue, boolean isOptional)
       throws VariableNotDefinedException {
-   setVariable(variableName, escapeHtml(variableValue), isOptional); }
+   setVariable(variableName, escapeHtml(variableValue), isOptional); 
+}
 
 /**
 * Sets a template variable to an escaped value.
@@ -405,7 +442,8 @@ public void setVariableEsc (String variableName, String variableValue, boolean i
 */
 public void setVariableEsc (String variableName, String variableValue)
       throws VariableNotDefinedException {
-   setVariable(variableName, escapeHtml(variableValue), false); }
+   setVariable(variableName, escapeHtml(variableValue), false); 
+}
 
 /**
 * Sets an optional template variable to an escaped value.
@@ -417,7 +455,8 @@ public void setVariableEsc (String variableName, String variableValue)
 * @see #escapeHtml(String)
 */
 public void setVariableOptEsc (String variableName, String variableValue) {
-   setVariable(variableName, escapeHtml(variableValue), true); }
+   setVariable(variableName, escapeHtml(variableValue), true); 
+}
 
 /**
 * Checks whether a variable with the specified name exists within the template.
@@ -426,7 +465,8 @@ public void setVariableOptEsc (String variableName, String variableValue) {
 *    <code>false</code> if no variable with the specified name exists in the template.
 */
 public boolean variableExists (String variableName) {
-   return mtp.lookupVariableName(variableName) != -1; }
+   return mtp.lookupVariableName(variableName) != -1; 
+}
 
 /**
 * Returns a map with the names and current values of the template variables.
@@ -435,7 +475,8 @@ public Map<String, String> getVariables() {
    HashMap<String, String> map = new HashMap<String, String>(mtp.varTabCnt);
    for (int varNo = 0; varNo < mtp.varTabCnt; varNo++)
       map.put(mtp.varTab[varNo], varValuesTab[varNo]);
-   return map; }
+   return map; 
+}
 
 /**
 * Adds an instance of a template block.
@@ -457,11 +498,15 @@ public void addBlock (String blockName, boolean isOptional)
    int blockNo = mtp.lookupBlockName(blockName);
    if(blockNo == -1) {
       if (isOptional) {
-         return; }
-      throw new BlockNotDefinedException(blockName); }
+         return; 
+      }
+      throw new BlockNotDefinedException(blockName); 
+   }
    while (blockNo != -1) {
       addBlockByNo(blockNo);
-      blockNo = mtp.blockTab[blockNo].nextWithSameName; }}
+      blockNo = mtp.blockTab[blockNo].nextWithSameName; 
+   }
+}
 
 /**
 * Adds an instance of a template block.
@@ -473,7 +518,8 @@ public void addBlock (String blockName, boolean isOptional)
 */
 public void addBlock (String blockName)
       throws BlockNotDefinedException {
-   addBlock(blockName, false); }
+   addBlock(blockName, false); 
+}
 
 /**
 * Adds an instance of an optional template block.
@@ -482,7 +528,8 @@ public void addBlock (String blockName)
 * @see #addBlock(String, boolean)
 */
 public void addBlockOpt (String blockName) {
-   addBlock(blockName, true); }
+   addBlock(blockName, true); 
+}
 
 private void addBlockByNo (int blockNo) {
    MiniTemplatorParser.BlockTabRec btr = mtp.blockTab[blockNo];
@@ -490,32 +537,42 @@ private void addBlockByNo (int blockNo) {
    int blockInstNo = registerBlockInstance();
    BlockInstTabRec bitr = blockInstTab[blockInstNo];
    if (bdtr.firstBlockInstNo == -1) {
-      bdtr.firstBlockInstNo = blockInstNo; }
+      bdtr.firstBlockInstNo = blockInstNo; 
+   }
    if (bdtr.lastBlockInstNo != -1) {
-      blockInstTab[bdtr.lastBlockInstNo].nextBlockInstNo = blockInstNo; } // set forward pointer of chain
+      blockInstTab[bdtr.lastBlockInstNo].nextBlockInstNo = blockInstNo; 
+   } // set forward pointer of chain
    bdtr.lastBlockInstNo = blockInstNo;
    bitr.blockNo = blockNo;
    bitr.instanceLevel = bdtr.instances++;
    if (btr.parentBlockNo == -1) {
-      bitr.parentInstLevel = -1; }
+      bitr.parentInstLevel = -1; 
+   }
     else {
-      bitr.parentInstLevel = blockDynTab[btr.parentBlockNo].instances; }
+      bitr.parentInstLevel = blockDynTab[btr.parentBlockNo].instances; 
+   }
    bitr.nextBlockInstNo = -1;
    if (btr.blockVarCnt > 0) {
-      bitr.blockVarTab = new String[btr.blockVarCnt]; }
+      bitr.blockVarTab = new String[btr.blockVarCnt]; 
+   }
    for (int blockVarNo=0; blockVarNo<btr.blockVarCnt; blockVarNo++) {  // copy instance variables for this block
       int varNo = btr.blockVarNoToVarNoMap[blockVarNo];
-      bitr.blockVarTab[blockVarNo] = varValuesTab[varNo]; }}
+      bitr.blockVarTab[blockVarNo] = varValuesTab[varNo]; 
+   }
+}
 
 // Returns the block instance number.
 private int registerBlockInstance() {
    int blockInstNo = blockInstTabCnt++;
    if (blockInstTab == null) {
-      blockInstTab = new BlockInstTabRec[64]; }
+      blockInstTab = new BlockInstTabRec[64]; 
+   }
    if (blockInstTabCnt > blockInstTab.length) {
-      blockInstTab = (BlockInstTabRec[])MiniTemplatorParser.resizeArray(blockInstTab, 2*blockInstTabCnt); }
+      blockInstTab = (BlockInstTabRec[])MiniTemplatorParser.resizeArray(blockInstTab, 2*blockInstTabCnt); 
+   }
    blockInstTab[blockInstNo] = new BlockInstTabRec();
-   return blockInstNo; }
+   return blockInstNo; 
+}
 
 /**
 * Checks whether a block with the specified name exists within the template.
@@ -524,7 +581,8 @@ private int registerBlockInstance() {
 *    <code>false</code> if no block with the specified name exists in the template.
 */
 public boolean blockExists (String blockName) {
-   return mtp.lookupBlockName(blockName) != -1; }
+   return mtp.lookupBlockName(blockName) != -1; 
+}
 
 //--- output generation ----------------------------------------------
 
@@ -540,12 +598,16 @@ public void generateOutput (String outputFileName)
    try {
       stream = new FileOutputStream(outputFileName);
       writer = new OutputStreamWriter(stream, charset);
-      generateOutput(writer); }
+      generateOutput(writer); 
+   }
     finally {
       if (writer != null) {
          writer.close(); }
       if (stream != null) {
-         stream.close(); }}}
+         stream.close(); 
+      }
+   }
+}
 
 /**
 * Generates the HTML page and writes it to a character stream.
@@ -591,60 +653,84 @@ private void writeBlockInstances (StringBuilder out, int blockNo, int parentInst
       bdtr.currBlockInstNo = bitr.nextBlockInstNo; }}
 
 private void writeBlockInstance (StringBuilder out, int blockInstNo) {
-   BlockInstTabRec bitr = blockInstTab[blockInstNo];
+   final BlockInstTabRec bitr = blockInstTab[blockInstNo];
    int blockNo = bitr.blockNo;
-   MiniTemplatorParser.BlockTabRec btr = mtp.blockTab[blockNo];
+   final BlockTabRec btr = mtp.blockTab[blockNo];
    int tPos = btr.tPosContentsBegin;
    int subBlockNo = blockNo + 1;
    int varRefNo = btr.firstVarRefNo;
+
    while (true) {
       int tPos2 = btr.tPosContentsEnd;
       int kind = 0;                              // assume end-of-block
       if (varRefNo != -1 && varRefNo < mtp.varRefTabCnt) { // check for variable reference
-         MiniTemplatorParser.VarRefTabRec vrtr = mtp.varRefTab[varRefNo];
+         final VarRefTabRec vrtr = mtp.varRefTab[varRefNo];
          if (vrtr.tPosBegin < tPos) {
             varRefNo++;
-            continue; }
+            continue; 
+         }
          if (vrtr.tPosBegin < tPos2) {
             tPos2 = vrtr.tPosBegin;
-            kind = 1; }}
+            kind = 1; 
+         }
+      }
       if (subBlockNo < mtp.blockTabCnt) {        // check for subblock
-         MiniTemplatorParser.BlockTabRec subBtr = mtp.blockTab[subBlockNo];
+         final BlockTabRec subBtr = mtp.blockTab[subBlockNo];
          if (subBtr.tPosBegin < tPos) {
             subBlockNo++;
-            continue; }
+            continue; 
+         }
          if (subBtr.tPosBegin < tPos2) {
             tPos2 = subBtr.tPosBegin;
-            kind = 2; }}
+            kind = 2; 
+         }
+      }
       if (tPos2 > tPos) {
-         out.append(mtp.templateText.substring(tPos, tPos2)); }
+            final String text = mtp.templateText.substring(tPos, tPos2);
+            out.append(text); 
+      }
       switch (kind) {
          case 0:                                 // end of block
             return;
          case 1: {                               // variable
-            MiniTemplatorParser.VarRefTabRec vrtr = mtp.varRefTab[varRefNo];
+            final VarRefTabRec vrtr = mtp.varRefTab[varRefNo];
             if (vrtr.blockNo != blockNo) {
-               throw new AssertionError(); }
-            String variableValue = bitr.blockVarTab[vrtr.blockVarNo];
-            if (variableValue != null) {
-               out.append(variableValue); 
+               throw new AssertionError(); 
             }
-            if( variableValue == null && this.skipUndefinedVars ) {
-                tPos = vrtr.tPosBegin;
+            if( vrtr.escaped ) { // ISSUE#3 -> SKIP INTERPRETATION 
+                final int skipEscPos = vrtr.tPosBegin+1;
+                final String text = mtp.templateText.substring(skipEscPos, vrtr.tPosEnd);
+                out.append(text);
+                tPos = vrtr.tPosEnd;         
             }
             else {
-                tPos = vrtr.tPosEnd;             
+                final String variableValue = bitr.blockVarTab[vrtr.blockVarNo];
+                if (variableValue != null) {
+                   out.append(variableValue); 
+                }
+                if( variableValue == null && this.skipUndefinedVars ) {
+                    tPos = vrtr.tPosBegin;
+                }
+                else {
+                    tPos = vrtr.tPosEnd;             
+                }
             }
             varRefNo++;
-            break; }
+            break; 
+         }
          case 2: {                               // sub block
             MiniTemplatorParser.BlockTabRec subBtr = mtp.blockTab[subBlockNo];
             if (subBtr.parentBlockNo != blockNo) {
-               throw new AssertionError(); }
+               throw new AssertionError(); 
+            }
             writeBlockInstances(out, subBlockNo, bitr.instanceLevel);  // recursive call
             tPos = subBtr.tPosEnd;
             subBlockNo++;
-            break; }}}}
+            break; 
+         }
+      }
+   }
+}
 
 //--- general utility routines ---------------------------------------
 
@@ -719,13 +805,13 @@ class MiniTemplatorParser {
 
 //--- constants ------------------------------------------------------
 
-private static final int     maxNestingLevel  = 20;        // maximum number of block nestings
-private static final int     maxCondLevels    = 20;        // maximum number of nested conditional commands ($if)
-private static final int     maxInclTemplateSize = 1000000; // maximum length of template string when including subtemplates
-private static final String  cmdStartStr      = "<!--";    // command start string
-private static final String  cmdEndStr        = "-->";     // command end string
-private static final String  cmdStartStrShort = "<$";      // short form command start string
-private static final String  cmdEndStrShort   = ">";       // short form command end string
+private static final int     maxNestingLevel        = 20;        // maximum number of block nestings
+private static final int     maxCondLevels          = 20;        // maximum number of nested conditional commands ($if)
+private static final int     maxInclTemplateSize    = 1000000;   // maximum length of template string when including subtemplates
+private static final String  cmdStartStr            = "<!--";    // command start string
+private static final String  cmdEndStr              = "-->";     // command end string
+private static final String  cmdStartStrShort       = "<$";      // short form command start string
+private static final String  cmdEndStrShort         = ">";       // short form command end string
 
 //--- nested classes -------------------------------------------------
 
@@ -734,7 +820,10 @@ public static class VarRefTabRec {                         // variable reference
    int                       tPosBegin;                    // template position of begin of variable reference
    int                       tPosEnd;                      // template position of end of variable reference
    int                       blockNo;                      // block no of the (innermost) block that contains this variable reference
-   int                       blockVarNo; }                 // block variable no. Index into BlockInstTab.BlockVarTab
+   int                       blockVarNo;                   // block variable no. Index into BlockInstTab.BlockVarTab
+   boolean                   escaped = false;              // if var is marked to be ignored   
+}
+
 public static class BlockTabRec {                          // block table record structure
    String                    blockName;                    // block name
    int                       nextWithSameName;             // block no of next block with same name or -1 (blocks are backward linked related to their position within the template)
@@ -748,7 +837,8 @@ public static class BlockTabRec {                          // block table record
    int                       blockVarCnt;                  // number of variables in block
    int[]                     blockVarNoToVarNoMap;         // maps block variable numbers to variable numbers
    int                       firstVarRefNo;                // variable reference no of first variable of this block or -1
-   boolean                   dummy; }                      // true if this is a dummy block that will never be included in the output
+   boolean                   dummy;                        // true if this is a dummy block that will never be included in the output
+}
 
 //--- variables ------------------------------------------------------
 
@@ -778,12 +868,13 @@ private boolean[]            condPassed;                   // true if an enabled
 private MiniTemplator        miniTemplator;                // the MiniTemplator who created this parser object
    // The reference to the MiniTemplator object is only used to call MiniTemplator.loadSubtemplate().
 private boolean              resumeCmdParsingFromStart;    // true = resume command parsing from the start position of the last command
+
 //--- constructor ----------------------------------------------------
 
 // (The MiniTemplator object is only passed to the parser, because the
 // parser needs to call MiniTemplator.loadSubtemplate() to load subtemplates.)
 public MiniTemplatorParser (String templateText, Set<String> conditionFlags, boolean shortFormEnabled, MiniTemplator miniTemplator)
-      throws MiniTemplator.TemplateSyntaxException {
+      throws TemplateSyntaxException {
    this.templateText = templateText;
    this.conditionFlags = createConditionFlagsSet(conditionFlags);
    this.shortFormEnabled = shortFormEnabled;
@@ -794,10 +885,11 @@ public MiniTemplatorParser (String templateText, Set<String> conditionFlags, boo
 private HashSet<String> createConditionFlagsSet (Set<String> flags) {
    if (flags == null || flags.isEmpty()) {
       return null; }
-   HashSet<String> flags2 = new HashSet<String>(flags.size());
+   HashSet<String> flags2 = new HashSet<>(flags.size());
    for (String flag : flags) {
       flags2.add (flag.toUpperCase()); }
-   return flags2; }
+   return flags2; 
+}
 
 //--- template parsing -----------------------------------------------
 
@@ -809,7 +901,7 @@ private void parseTemplate()
    endMainBlock();
    checkBlockDefinitionsComplete();
    if (condLevel != -1) {
-      throw new MiniTemplator.TemplateSyntaxException ("$if without matching $endIf."); }
+      throw new TemplateSyntaxException ("$if without matching $endIf."); }
    parseTemplateVariables();
    associateVariablesWithBlocks();
    terminateParsing(); }
@@ -840,7 +932,8 @@ private void beginMainBlock() {
    btr.tPosBegin = 0;
    btr.tPosContentsBegin = 0;
    openBlocksTab[currentNestingLevel] = blockNo;
-   currentNestingLevel++; }
+   currentNestingLevel++; 
+}
 
 // Completes the main block registration.
 private void endMainBlock() {
@@ -848,7 +941,8 @@ private void endMainBlock() {
    btr.tPosContentsEnd = templateText.length();
    btr.tPosEnd = templateText.length();
    btr.definitionIsOpen = false;
-   currentNestingLevel--; }
+   currentNestingLevel--; 
+}
 
 //--- Template commands --------------------------------------------------------
 
@@ -886,7 +980,7 @@ private void parseTemplateCommands()
        else {                                              // normal (long) form command
          p = templateText.indexOf(cmdEndStr, p0 + cmdStartStr.length());
          if (p == -1) {
-            throw new MiniTemplator.TemplateSyntaxException("Invalid HTML comment in template at offset " + p0 + "."); }
+            throw new TemplateSyntaxException("Invalid HTML comment in template at offset " + p0 + "."); }
          p += cmdEndStr.length();
          String cmdLine = templateText.substring(p0 + cmdStartStr.length(), p - cmdEndStr.length());
          resumeCmdParsingFromStart = false;
@@ -921,7 +1015,7 @@ private boolean processTemplateCommand (String cmdLine, int cmdTPosBegin, int cm
          processEndIfCmd(parms, cmdTPosBegin, cmdTPosEnd); }
       else {
          if (cmd.startsWith("$") && !cmd.startsWith("${")) {
-            throw new MiniTemplator.TemplateSyntaxException("Unknown command \"" + cmd + "\" in template at offset " + cmdTPosBegin + "."); }
+            throw new TemplateSyntaxException( format("Unknown command '%s' in template at offset %s.", cmd, cmdTPosBegin )); }
           else {
             return false; }}
    return true; }
@@ -959,11 +1053,11 @@ private void processBeginBlockCmd (String parms, int cmdTPosBegin, int cmdTPosEn
       return; }
    int p0 = skipBlanks(parms, 0);
    if (p0 >= parms.length()) {
-      throw new MiniTemplator.TemplateSyntaxException("Missing block name in $BeginBlock command in template at offset " + cmdTPosBegin + "."); }
+      throw new TemplateSyntaxException("Missing block name in $BeginBlock command in template at offset " + cmdTPosBegin + "."); }
    int p = skipNonBlanks(parms, p0);
    String blockName = parms.substring(p0, p);
    if (!isRestOfStringBlank(parms, p)) {
-      throw new MiniTemplator.TemplateSyntaxException("Extra parameter in $BeginBlock command in template at offset " + cmdTPosBegin + "."); }
+      throw new TemplateSyntaxException("Extra parameter in $BeginBlock command in template at offset " + cmdTPosBegin + "."); }
    int blockNo = registerBlock(blockName);
    BlockTabRec btr = blockTab[blockNo];
    btr.tPosBegin = cmdTPosBegin;
@@ -971,7 +1065,7 @@ private void processBeginBlockCmd (String parms, int cmdTPosBegin, int cmdTPosEn
    openBlocksTab[currentNestingLevel] = blockNo;
    currentNestingLevel++;
    if (currentNestingLevel > maxNestingLevel) {
-      throw new MiniTemplator.TemplateSyntaxException("Block nesting overflow for block \"" + blockName + "\" in template at offset " + cmdTPosBegin + "."); }}
+      throw new TemplateSyntaxException("Block nesting overflow for block \"" + blockName + "\" in template at offset " + cmdTPosBegin + "."); }}
 
 // Processes the $endBlock command.
 private void processEndBlockCmd (String parms, int cmdTPosBegin, int cmdTPosEnd)
@@ -1021,7 +1115,7 @@ private int registerBlock (String blockName) {
    btr.blockVarNoToVarNoMap = new int[32];
    btr.dummy = false;
    if (blockName != null) {
-      blockNameToNoMap.put(blockName.toUpperCase(), new Integer(blockNo)); }
+      blockNameToNoMap.put(blockName.toUpperCase(), blockNo); }
    return blockNo; }
 
 // Registers a dummy block to exclude a range within the template text.
@@ -1204,48 +1298,75 @@ private void associateVariablesWithBlocks() {
          btr.firstVarRefNo = varRefNo; }
       vrtr.blockNo = activeBlockNo;
       vrtr.blockVarNo = blockVarNo;
-      varRefNo++; }}
+      varRefNo++; 
+   }
+}
+
+private boolean isVarEscaped( int begin ) {
+    if( begin<=0 ) return false;
+    
+    char c = templateText.charAt(begin-1);
+    
+    return ( c == '\\' || c == '$' );
+}
 
 // Parses variable references within the template in the format "${VarName}" .
-private void parseTemplateVariables()
-      throws MiniTemplator.TemplateSyntaxException {
+private void parseTemplateVariables() throws TemplateSyntaxException {
    int p = 0;
    while (true) {
       p = templateText.indexOf("${", p);
       if (p == -1) {
-         break; }
+            break; 
+      }
       int p0 = p;
       p = templateText.indexOf("}", p);
       if (p == -1) {
-         throw new MiniTemplator.TemplateSyntaxException("Invalid variable reference in template at offset " + p0 + "."); }
+         throw new TemplateSyntaxException(format("Invalid variable reference in template at offset %d.", p0)); 
+      }
       p++;
       String varName = templateText.substring(p0+2, p-1).trim();
       if (varName.length() == 0) {
-         throw new MiniTemplator.TemplateSyntaxException("Empty variable name in template at offset " + p0 + "."); }
-      registerVariableReference(varName, p0, p); }}
+         throw new TemplateSyntaxException(format("Empty variable name in template at offset %d.",p0)); 
+      }
+      registerVariableReference(varName, p0, p); 
+   }
+}
 
 private void registerVariableReference (String varName, int tPosBegin, int tPosEnd) {
-   int varNo;
-   varNo = lookupVariableName(varName);
+   int varNo = lookupVariableName(varName);
    if (varNo == -1) {
-      varNo = registerVariable(varName); }
+      varNo = registerVariable(varName); 
+   }
    int varRefNo = varRefTabCnt++;
    if (varRefTabCnt > varRefTab.length) {
-      varRefTab = (VarRefTabRec[])resizeArray(varRefTab, 2*varRefTabCnt); }
-   VarRefTabRec vrtr = new VarRefTabRec();
+      varRefTab = (VarRefTabRec[])resizeArray(varRefTab, 2*varRefTabCnt); 
+   }
+   
+   final VarRefTabRec vrtr = new VarRefTabRec();
    varRefTab[varRefNo] = vrtr;
-   vrtr.tPosBegin = tPosBegin;
+   
+   if( isVarEscaped(tPosBegin)) {
+       vrtr.tPosBegin = tPosBegin - 1;
+       vrtr.escaped = true;   
+   }
+   else {
+       vrtr.tPosBegin = tPosBegin;
+       vrtr.escaped = false;   
+   }
    vrtr.tPosEnd = tPosEnd;
-   vrtr.varNo = varNo; }
+   vrtr.varNo = varNo; 
+}
 
 // Returns the variable number of the newly registered variable.
 private int registerVariable (String varName) {
    int varNo = varTabCnt++;
    if (varTabCnt > varTab.length) {
-      varTab = (String[])resizeArray(varTab, 2*varTabCnt); }
+      varTab = (String[])resizeArray(varTab, 2*varTabCnt); 
+   }
    varTab[varNo] = varName;
-   varNameToNoMap.put(varName.toUpperCase(), new Integer(varNo));
-   return varNo; }
+   varNameToNoMap.put(varName.toUpperCase(), varNo);
+   return varNo; 
+}
 
 //--- name lookup routines -------------------------------------------
 
@@ -1254,9 +1375,11 @@ private int registerVariable (String varName) {
 public int lookupVariableName (String varName) {
    Integer varNoWrapper = varNameToNoMap.get(varName.toUpperCase());
    if (varNoWrapper == null) {
-      return -1; }
+      return -1; 
+   }
    int varNo = varNoWrapper.intValue();
-   return varNo; }
+   return varNo; 
+}
 
 // Maps block name to block number.
 // If there are multiple blocks with the same name, the block number of the last
