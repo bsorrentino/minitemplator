@@ -1,0 +1,3 @@
+\${JAVA_HOME} - $${PATH}
+path is: ${PATH}
+JAVA_HOME = ${JAVA_HOME}
