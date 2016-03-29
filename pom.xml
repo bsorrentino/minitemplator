@@ -3,7 +3,7 @@
   <groupId>org.bsc.util</groupId>
   <artifactId>minitemplator-repackaged</artifactId>
   <name>MiniTemplator - ${project.version}</name>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2</version>
   <description>MiniTemplator is a compact template engine for HTML files.</description>
   <url>http://www.source-code.biz/MiniTemplator</url>
   
