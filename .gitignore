@@ -1,6 +1,18 @@
-/target/
+
+# MAC
+.DS_Store
+
+# MAVEN
+target/
+
+# ECLIPSE
 .settings/
 .classpath
 .project
-.DS_Store
 
+# INTELLIJ
+.idea/
+*.iml
+
+# CHANGELOG PLUGIN
+.okhttpcache/
