@@ -12,16 +12,23 @@
 
 package biz.source_code.miniTemplator;
 
-import biz.source_code.miniTemplator.MiniTemplator.TemplateSyntaxException;
-import biz.source_code.miniTemplator.MiniTemplatorParser.BlockTabRec;
-import biz.source_code.miniTemplator.MiniTemplatorParser.VarRefTabRec;
-import java.io.*;
+import static java.lang.String.format;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import static java.lang.String.format;
+import biz.source_code.miniTemplator.MiniTemplator.TemplateSyntaxException;
+import biz.source_code.miniTemplator.MiniTemplatorParser.BlockTabRec;
+import biz.source_code.miniTemplator.MiniTemplatorParser.VarRefTabRec;
 
 /**
 * A compact template engine for HTML files.
@@ -163,13 +170,14 @@ public static class Builder {                // template specification
         }
 
            
-        public final MiniTemplator build( java.io.InputStream content, Charset charset ) throws IOException {
+        public final MiniTemplator build( String baseDir, java.io.InputStream content, Charset charset ) throws IOException {
             MiniTemplator result = new MiniTemplator();
+            result.subtemplateBasePath = baseDir;
             result.init(this, new java.io.InputStreamReader(content, charset), charset);
             return result;
         }     
         public final MiniTemplator build( java.net.URL url, Charset charset ) throws IOException {
-            return this.build( url.openStream(), charset );
+            return this.build(url.getPath(), url.openStream(), charset );
         }     
     }
 
