@@ -13,3 +13,6 @@ target/
 # INTELLIJ
 .idea/
 *.iml
+
+# CHANGELOG PLUGIN
+.okhttpcache/
