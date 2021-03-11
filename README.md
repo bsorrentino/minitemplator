@@ -19,9 +19,27 @@ Available as maven dependency from [CENTRAL](http://search.maven.org/#artifactde
 <dependency>
     <groupId>org.bsc.util</groupId>
     <artifactId>minitemplator-repackaged</artifactId>
-    <version>1.1</version>
+    <version>_last_version_</version>
 </dependency>
 ```
+**Example**
+```java
+
+String templateFileName = "src/test/resources/template.txt";
+
+File f = new File(templateFileName);
+
+MiniTemplator t =
+    MiniTemplator.builder()
+        .setSkipUndefinedVars(true)
+        .build(f.toURI().toURL());
+
+t.setVariable("var1", "test");
+
+String result = t.generateOutput();
+
+```
+
 
 ## What is a Template Engine?
 
