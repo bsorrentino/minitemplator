@@ -32,7 +32,7 @@ public class Issue3Test {
 
         final MiniTemplator t = new MiniTemplator.Builder()
                                  .setSkipUndefinedVars(true)
-                                 .build(f.toURI().toURL(), Charset.defaultCharset());
+                                 .build(f.toURI().toURL());
         
         final String path = "/tmp";
         final String java_home = System.getProperty("java.home");
