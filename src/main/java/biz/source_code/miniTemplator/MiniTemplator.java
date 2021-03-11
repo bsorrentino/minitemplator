@@ -13,6 +13,7 @@
 package biz.source_code.miniTemplator;
 
 import static java.lang.String.format;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -54,7 +55,6 @@ import biz.source_code.miniTemplator.MiniTemplatorParser.VarRefTabRec;
 *       &lt;!-- $endIf --&gt;
 *
 *    Short form of conditional blocks:
-*    (only recognized if {@link TemplateSpecification#shortFormEnabled TemplateSpecification.shortFormEnabled} is <code>true</code>)
 *       &lt;$? flag1 flag2 &gt;
 *         ... included if flag1 or flag2 is set ...
 *       &lt;$: !flag3 flag4 &gt;
@@ -80,9 +80,8 @@ import biz.source_code.miniTemplator.MiniTemplatorParser.VarRefTabRec;
 *  <li>Blocks can be nested.</li>
 *  <li>Conditional blocks ($if) and includes ($include) are resolved when the template is parsed.
 *      Parsing is done within the MiniTemplator constructor.
-*      Condition flags can be passed to the constructor using {@link TemplateSpecification}.
+*      Condition flags can be passed to the constructor.
 *  <li>Normal blocks ($beginBlock) must be added (and can be repeated) by the application program using <code>addBlock()</code>.
-*  <li>The {@link MiniTemplatorCache} class may be used to cache MiniTemplator objects with parsed templates.</li>
 *  </ul>
 *
 * <p>
@@ -220,14 +219,15 @@ private boolean              skipUndefinedVars;
 
 
 /**
-* Constructs a MiniTemplator object by specifying only the file name.
-* <p>This is a convenience constructor that may be used when only the file name has to be specified.
-* @param  templateFileName         the file name of the template file.
-* @throws TemplateSyntaxException  when a syntax error is detected within the template.
-* @throws IOException              when an i/o error occurs while reading the template.
-* @see #MiniTemplator(TemplateSpecification)
-*/
-
+ * Constructs a MiniTemplator object by specifying only the file name.
+ * <p>This is a convenience constructor that may be used when only the file name has to be specified.
+ *
+ * @param builder
+ * @param content
+ * @param charset
+ * @throws IOException
+ * @throws TemplateSyntaxException
+ */
 private void init( Builder builder, java.io.Reader content, Charset charset )
       throws IOException, TemplateSyntaxException {
     
@@ -275,8 +275,6 @@ protected MiniTemplator() {}
 * somewhere else, e.g. from a database.
 * <p>This implementation of the method interprets <code>subtemplateName</code>
 * as a relative file path name and reads the template string from that file.
-* {@link MiniTemplator.TemplateSpecification#subtemplateBasePath} is used to convert
-* the relative path of the subtemplate into an absolute path.
 * @param  subtemplateName     the name of the subtemplate.
 *        Normally a relative file path.
 *        This is the argument string that was specified with the "$Include" command.
@@ -328,9 +326,7 @@ public void reset() {
 * It is fast, because the template does not have to be parsed again,
 * and the internal data structures that contain the parsed template
 * information are shared among the clones.
-* <p>This method is used by the {@link MiniTemplatorCache} class to
-* clone the cached MiniTemplator objects.     
-* @return 
+* @return
 */
 public MiniTemplator cloneReset() {
    MiniTemplator m = new MiniTemplator();
@@ -1381,12 +1377,12 @@ private int registerVariable (String varName) {
 // Maps variable name to variable number.
 // Returns -1 if the variable name is not found.
 public int lookupVariableName (String varName) {
-   Integer varNoWrapper = varNameToNoMap.get(varName.toUpperCase());
+  Integer varNoWrapper = varNameToNoMap.get(varName.toUpperCase());
    if (varNoWrapper == null) {
-      return -1; 
+      return -1;
    }
    int varNo = varNoWrapper.intValue();
-   return varNo; 
+   return varNo;
 }
 
 // Maps block name to block number.
@@ -1398,7 +1394,8 @@ public int lookupBlockName (String blockName) {
    if (blockNoWrapper == null) {
       return -1; }
    int blockNo = blockNoWrapper.intValue();
-   return blockNo; }
+   return blockNo;
+}
 
 //--- general utility routines ---------------------------------------
 
@@ -1412,20 +1409,24 @@ public static Object resizeArray (Object oldArray, int newSize) {
    int preserveLength = Math.min(oldSize, newSize);
    if (preserveLength > 0) {
       System.arraycopy(oldArray, 0, newArray, 0, preserveLength); }
-   return newArray; }
+   return newArray;
+}
 
 // Skips blanks (white space) in string s starting at position p.
 private static int skipBlanks (String s, int p) {
    while (p < s.length() && Character.isWhitespace(s.charAt(p))) p++;
-   return p; }
+   return p;
+}
 
 // Skips non-blanks (no-white space) in string s starting at position p.
 private static int skipNonBlanks (String s, int p) {
    while (p < s.length() && !Character.isWhitespace(s.charAt(p))) p++;
-   return p; }
+   return p;
+}
 
 // Returns true if string s is blank (white space) from position p to the end.
 public static boolean isRestOfStringBlank (String s, int p) {
-   return skipBlanks(s, p) >= s.length(); }
+   return skipBlanks(s, p) >= s.length();
+}
 
 } // End class MiniTemplatorParser
