@@ -3,7 +3,12 @@ package org.bsc;
 import biz.source_code.miniTemplator.MiniTemplator;
 import org.junit.Test;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static org.junit.Assert.assertEquals;
 
@@ -239,5 +244,55 @@ public class ParseTest {
         "==> ${var2} <==\n";
 
     assertEquals(expected, result);
+  }
+
+
+  @Test
+  public void encodingTest() throws Exception {
+
+    final String templateFileName = "src/test/resources/encoding.txt";
+
+    final java.io.File f = new java.io.File(templateFileName);
+
+    final Function<Charset,String> templator = (Charset encoding ) -> {
+      try {
+        return MiniTemplator.builder()
+                .setCharset(encoding)
+                .setSkipUndefinedVars(true)
+                .build(new FileInputStream(f))
+              .generateOutput();
+      } catch (IOException e) {
+        throw new Error(e);
+      }
+    };
+
+    final String expected_utf8 = "h2. Hello world\n" +
+        "\n" +
+        "{warning}\n" +
+        "lorem ipsum\n" +
+        "{warning}\n" +
+        "\n" +
+        "\n" +
+        "nejaké špeciálne znaky?\n" +
+        "\n" +
+        "diakritika čučoriedka, soľ, žriebä\n" +
+        "\n" +
+        "„úvodzovky“";
+
+    final String expected_us_ascii = "h2. Hello world\n" +
+        "\n" +
+        "{warning}\n" +
+        "lorem ipsum\n" +
+        "{warning}\n" +
+        "\n" +
+        "\n" +
+        "nejak?? ??peci??lne znaky?\n" +
+        "\n" +
+        "diakritika ??u??oriedka, so??, ??rieb??\n" +
+        "\n" +
+        "?????vodzovky???";
+
+    assertEquals(expected_us_ascii, templator.apply(Charset.forName("US-ASCII")));
+    assertEquals(expected_utf8, templator.apply(Charset.forName("UTF8")));
   }
 }

@@ -14,19 +14,13 @@ package biz.source_code.miniTemplator;
 
 import static java.lang.String.format;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import biz.source_code.miniTemplator.MiniTemplator.TemplateSyntaxException;
 import biz.source_code.miniTemplator.MiniTemplatorParser.BlockTabRec;
@@ -631,22 +625,25 @@ public class MiniTemplator {
    *
    * @param outputFileName name of the file to which the generated HTML page will be written.
    * @throws IOException when an i/o error occurs while writing to the file.
+   * @Deprecated
    */
-  public void generateOutput(String outputFileName)
-      throws IOException {
-    FileOutputStream stream = null;
-    OutputStreamWriter writer = null;
-    try {
-      stream = new FileOutputStream(outputFileName);
-      writer = new OutputStreamWriter(stream, charset);
+  @Deprecated
+  public void generateOutput(String outputFileName) throws IOException {
+    generateOutput( new File(outputFileName) );
+  }
+
+  /**
+   * Generates the HTML page and writes it into a file.
+   *
+   * @param outputFile file to which the generated Text page will be written.
+   * @throws IOException when an i/o error occurs while writing to the file.
+   */
+  public void generateOutput(File outputFile) throws IOException {
+    try (
+        final FileOutputStream stream = new FileOutputStream(outputFile);
+        final OutputStreamWriter writer = new OutputStreamWriter(stream, charset);
+    ) {
       generateOutput(writer);
-    } finally {
-      if (writer != null) {
-        writer.close();
-      }
-      if (stream != null) {
-        stream.close();
-      }
     }
   }
 
@@ -658,16 +655,6 @@ public class MiniTemplator {
    * @throws IOException when an i/o error occurs while writing to the stream.
    */
   public void generateOutput(Writer outputWriter) throws IOException {
-    String s = generateOutput();
-    outputWriter.write(s);
-  }
-
-  /**
-   * Generates the HTML page and returns it as a string.
-   *
-   * @return A string that contains the generated HTML page.
-   */
-  public String generateOutput() {
     if (blockDynTab[0].instances == 0) {
       addBlockByNo(0);
     }                         // add main block
@@ -675,15 +662,46 @@ public class MiniTemplator {
       BlockDynTabRec bdtr = blockDynTab[blockNo];
       bdtr.currBlockInstNo = bdtr.firstBlockInstNo;
     }
-    StringBuilder out = new StringBuilder();
-    writeBlockInstances(out, 0, -1);
-    return out.toString();
+    writeBlockInstances(outputWriter, 0, -1);
   }
 
+
+  /**
+   * Generates the HTML page and returns it as a string.
+   *
+   * @return A string that contains the generated HTML page.
+   */
+  public String generateOutput() throws IOException {
+    try(  final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+          final OutputStreamWriter out = new OutputStreamWriter(baos, charset) ){
+
+        generateOutput(out);
+        out.flush();
+        return baos.toString();
+    }
+  }
+
+  /**
+   * Generates the HTML page and returns it as a string.
+   *
+   * @return A string that contains the generated HTML page.
+   */
+  public CompletableFuture<String> generateOutputAsync() {
+    final CompletableFuture<String>  result = new CompletableFuture<>();
+
+    try {
+      result.complete(generateOutput());
+    }
+    catch( IOException ioex ) {
+      result.completeExceptionally( new Exception( "error generating output from template", ioex ) );
+    }
+
+    return result;
+  }
   // Writes all instances of a block that are contained within a specific
 // parent block instance.
 // Called recursively.
-  private void writeBlockInstances(StringBuilder out, int blockNo, int parentInstLevel) {
+  private void writeBlockInstances(Writer out, int blockNo, int parentInstLevel) throws IOException {
     BlockDynTabRec bdtr = blockDynTab[blockNo];
     while (true) {
       int blockInstNo = bdtr.currBlockInstNo;
@@ -702,7 +720,7 @@ public class MiniTemplator {
     }
   }
 
-  private void writeBlockInstance(StringBuilder out, int blockInstNo) {
+  private void writeBlockInstance(Writer out, int blockInstNo) throws IOException {
     final BlockInstTabRec bitr = blockInstTab[blockInstNo];
     int blockNo = bitr.blockNo;
     final BlockTabRec btr = parser.blockTab[blockNo];
