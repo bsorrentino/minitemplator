@@ -1,25 +1,26 @@
 ## MiniTemplator
 
+><a href="http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22minitemplator-repackaged%22"><img src="https://img.shields.io/maven-central/v/org.bsc.util/minitemplator-repackaged.svg"></a>
+
 MiniTemplator is a java compact template engine.
 
-
-><a href="http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22minitemplator-repackaged%22"><img src="https://img.shields.io/maven-central/v/org.bsc.util/minitemplator-repackaged.svg">
-
+Motivation
+> This project was originally born to provide an artifact available from Maven Central for project [biz.source_code.MiniTemplator](https://www.source-code.biz/MiniTemplator/)
 
 ## Features
 
-Simple syntax for template variables and blocks.
-Blocks can be nested.
-Compact, well-documented source code. A single code module.
-Documentation and sample programs available.
-Open Source, licensed under the [GNU LGPL](http://www.gnu.org/licenses/lgpl.html) & [EPL](http://www.eclipse.org/legal). It may be used freely, even for commercial projects ([Details](http://en.wikipedia.org/wiki/LGPL)).
-Available as maven dependency from [CENTRAL](http://search.maven.org/#artifactdetails%7Corg.bsc.util%7Cminitemplator-repackaged%7C1.2%7Cmaven-plugin)
+* Simple syntax for template variables and blocks.
+* Blocks can be nested.
+* Compact, well-documented source code. A single code module.
+* Documentation and sample programs available.
+* Open Source, licensed under the [GNU LGPL](http://www.gnu.org/licenses/lgpl.html) & [EPL](http://www.eclipse.org/legal). It may be used freely, even for commercial projects ([Details](http://en.wikipedia.org/wiki/LGPL)).
+* Available as maven dependency from [CENTRAL](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22minitemplator-repackaged%22)
 
 ```xml
 <dependency>
     <groupId>org.bsc.util</groupId>
     <artifactId>minitemplator-repackaged</artifactId>
-    <version>_last_version_</version>
+    <version>1.4</version>
 </dependency>
 ```
 **Example**
