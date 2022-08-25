@@ -5,6 +5,141 @@
 ## Next release
 ### Generic changes
 
+**build(deploy.yaml): add trigger on release**
+
+
+[5fcaa8f9bbfd0ed](https://github.com/bsorrentino/minitemplator/commit/5fcaa8f9bbfd0ed) bsorrentino *2022-08-25 13:29:03*
+
+**Merge branch 'bugfix/pr#6' into develop**
+
+
+[41974fb2d74663f](https://github.com/bsorrentino/minitemplator/commit/41974fb2d74663f) bsorrentino *2022-08-25 13:22:57*
+
+**Merge branch 'wromijn-master' into bugfix/pr#6**
+
+
+[0262fd6ab615f67](https://github.com/bsorrentino/minitemplator/commit/0262fd6ab615f67) bsorrentino *2022-08-25 13:21:33*
+
+**fixed issues with windows encoding**
+
+
+[d3aa54d44884a3d](https://github.com/bsorrentino/minitemplator/commit/d3aa54d44884a3d) Willem Romijn *2022-08-24 11:40:16*
+
+**Merge branch 'master' into develop**
+
+
+[e7956e0af1fe945](https://github.com/bsorrentino/minitemplator/commit/e7956e0af1fe945) Build Pipeline *2022-01-12 09:44:59*
+
+**Merge branch 'hotfix/readme'**
+
+
+[29dfa9cae5f6e5d](https://github.com/bsorrentino/minitemplator/commit/29dfa9cae5f6e5d) Build Pipeline *2022-01-12 09:44:56*
+
+**update readme**
+
+
+[6a516d355961697](https://github.com/bsorrentino/minitemplator/commit/6a516d355961697) Build Pipeline *2022-01-12 09:43:53*
+
+**Merge branch 'master' into develop**
+
+
+[df6babc33ab960e](https://github.com/bsorrentino/minitemplator/commit/df6babc33ab960e) Build Pipeline *2022-01-10 14:27:36*
+
+**Merge branch 'hotfix/actions'**
+
+
+[f130b1d5e8f2a9c](https://github.com/bsorrentino/minitemplator/commit/f130b1d5e8f2a9c) Build Pipeline *2022-01-10 14:27:34*
+
+**update(actions)**
+
+ * set JDK8
+
+[e178777c684da93](https://github.com/bsorrentino/minitemplator/commit/e178777c684da93) Build Pipeline *2022-01-10 14:27:15*
+
+**Merge branch 'master' into develop**
+
+
+[7ec3b7729aee087](https://github.com/bsorrentino/minitemplator/commit/7ec3b7729aee087) Build Pipeline *2022-01-10 14:22:42*
+
+**Merge branch 'hotfix/actions'**
+
+
+[9b1a4d67fb370bd](https://github.com/bsorrentino/minitemplator/commit/9b1a4d67fb370bd) Build Pipeline *2022-01-10 14:22:40*
+
+**feature(actions)**
+
+
+[236d5231d995a41](https://github.com/bsorrentino/minitemplator/commit/236d5231d995a41) Build Pipeline *2022-01-10 14:22:24*
+
+**Merge tag 'v1.4' into develop**
+
+ * new release
+
+[e114fbddfd7ca36](https://github.com/bsorrentino/minitemplator/commit/e114fbddfd7ca36) Build Pipeline *2022-01-10 14:19:10*
+
+**Merge branch 'release/1.4'**
+
+
+[2c9829c709ca883](https://github.com/bsorrentino/minitemplator/commit/2c9829c709ca883) Build Pipeline *2022-01-10 14:18:36*
+
+**from http to https**
+
+
+[766c90fa954b705](https://github.com/bsorrentino/minitemplator/commit/766c90fa954b705) Build Pipeline *2022-01-10 14:17:30*
+
+**update varsion**
+
+
+[0bbd15f04e0c089](https://github.com/bsorrentino/minitemplator/commit/0bbd15f04e0c089) Build Pipeline *2022-01-10 14:17:03*
+
+**add github actions**
+
+
+[6eba8a1ee3c813a](https://github.com/bsorrentino/minitemplator/commit/6eba8a1ee3c813a) Build Pipeline *2022-01-10 14:13:52*
+
+**fix(charset)**
+
+ * use charset in generating output
+ * add unit test
+
+[a94f826d8ae7247](https://github.com/bsorrentino/minitemplator/commit/a94f826d8ae7247) Build Pipeline *2022-01-10 12:29:19*
+
+**move to next development version**
+
+
+[cbc6f11ac27a2df](https://github.com/bsorrentino/minitemplator/commit/cbc6f11ac27a2df) Build Pipeline *2021-07-15 14:44:33*
+
+**move to java 8 compliance, add profile for deploy doc to confluence**
+
+
+[d93750d8c259796](https://github.com/bsorrentino/minitemplator/commit/d93750d8c259796) Build Pipeline *2021-07-15 14:42:35*
+
+**Merge tag 'v1.3' into develop**
+
+ * release 1.3
+
+[b296db6024abe0e](https://github.com/bsorrentino/minitemplator/commit/b296db6024abe0e) Build Pipeline *2021-03-11 20:06:32*
+
+
+## v1.3
+### Generic changes
+
+**Merge branch 'release/1.3'**
+
+
+[dbeaad973d92647](https://github.com/bsorrentino/minitemplator/commit/dbeaad973d92647) Build Pipeline *2021-03-11 20:06:23*
+
+**updated maven-gpg-plugin**
+
+
+[4c6a65fa574f220](https://github.com/bsorrentino/minitemplator/commit/4c6a65fa574f220) Build Pipeline *2021-03-11 19:58:55*
+
+**moved to next release**
+
+ * added changelog
+
+[7495dee5f5e5193](https://github.com/bsorrentino/minitemplator/commit/7495dee5f5e5193) Build Pipeline *2021-03-11 19:56:14*
+
 **Improve builder**
 
  * added subtemplateBasePath support
@@ -33,6 +168,21 @@
 
 [81f6c02fb431d36](https://github.com/bsorrentino/minitemplator/commit/81f6c02fb431d36) Build Pipeline *2021-03-11 18:37:34*
 
+**Merge branch 'feature/PR4' into develop**
+
+
+[e55f800b98c9440](https://github.com/bsorrentino/minitemplator/commit/e55f800b98c9440) Build Pipeline *2021-03-11 18:30:28*
+
+**Merge branch 'annorchen-master' into feature/PR4**
+
+
+[21553f5ca0c06ff](https://github.com/bsorrentino/minitemplator/commit/21553f5ca0c06ff) Build Pipeline *2021-03-11 18:30:15*
+
+**merged PR #4**
+
+
+[2ce4574cb385e4a](https://github.com/bsorrentino/minitemplator/commit/2ce4574cb385e4a) Build Pipeline *2021-03-11 18:27:15*
+
 **update ignore**
 
 
@@ -53,17 +203,19 @@
 
 [bdeed3fd4ee8ced](https://github.com/bsorrentino/minitemplator/commit/bdeed3fd4ee8ced) bsorrentino *2016-03-29 23:26:30*
 
-
-###  [#4](https://github.com/bsorrentino/minitemplator/pull/4) Bump junit from 4.12 to 4.13.1    *dependencies*  
-
-**merged PR #4**
+**Merge branch 'release/1.2' into develop**
 
 
-[2ce4574cb385e4a](https://github.com/bsorrentino/minitemplator/commit/2ce4574cb385e4a) Build Pipeline *2021-03-11 18:27:15*
+[5c229b98f1d7a14](https://github.com/bsorrentino/minitemplator/commit/5c229b98f1d7a14) bsorrentino *2016-03-29 23:24:43*
 
 
 ## v1.2
 ### Generic changes
+
+**Merge branch 'release/1.2'**
+
+
+[543874485a040ab](https://github.com/bsorrentino/minitemplator/commit/543874485a040ab) bsorrentino *2016-03-29 23:24:34*
 
 **add javadoc plugin**
 
@@ -75,6 +227,16 @@
  * update readme
 
 [ee2cf1fffd47017](https://github.com/bsorrentino/minitemplator/commit/ee2cf1fffd47017) bsorrentino *2016-03-29 23:16:49*
+
+**Merge branch 'feature/issue3' into develop**
+
+
+[dc50ab2932d518d](https://github.com/bsorrentino/minitemplator/commit/dc50ab2932d518d) bsorrentino *2016-03-21 10:15:25*
+
+**fix issue#3**
+
+
+[7bad0f6c218bf44](https://github.com/bsorrentino/minitemplator/commit/7bad0f6c218bf44) bsorrentino *2016-03-21 10:13:43*
 
 **refactoring-a**
 
@@ -103,22 +265,29 @@
 
 [4b539dff8ffbd48](https://github.com/bsorrentino/minitemplator/commit/4b539dff8ffbd48) bsorrentino *2014-01-27 11:24:42*
 
-
-###  [#3](https://github.com/bsorrentino/minitemplator/issues/3) add way to skip variable substitution using a escape char  
-
-**fix issue#3**
+**[maven-release-plugin] prepare for next development iteration**
 
 
-[7bad0f6c218bf44](https://github.com/bsorrentino/minitemplator/commit/7bad0f6c218bf44) bsorrentino *2016-03-21 10:13:43*
+[c330996bb05cd20](https://github.com/bsorrentino/minitemplator/commit/c330996bb05cd20) bsorrentino *2014-01-26 18:25:27*
 
 
 ## v1.1
 ### Generic changes
 
+**[maven-release-plugin] prepare release v1.1**
+
+
+[9611d165d83b368](https://github.com/bsorrentino/minitemplator/commit/9611d165d83b368) bsorrentino *2014-01-26 18:24:56*
+
 **add nexus-staging-maven-plugin**
 
 
 [65f5a4ce5360a3f](https://github.com/bsorrentino/minitemplator/commit/65f5a4ce5360a3f) bsorrentino *2014-01-26 18:22:51*
+
+**issue#2**
+
+
+[851ec37efad09c8](https://github.com/bsorrentino/minitemplator/commit/851ec37efad09c8) bsorrentino *2014-01-14 15:40:42*
 
 **fix encoding propagation**
 
@@ -155,17 +324,19 @@
 
 [8c5eb34e1f58df1](https://github.com/bsorrentino/minitemplator/commit/8c5eb34e1f58df1) bsorrentino *2013-10-19 13:24:53*
 
-
-###  [#2](https://github.com/bsorrentino/minitemplator/issues/2) encoding problem    *bug*  
-
-**issue#2**
+**[maven-release-plugin] prepare for next development iteration**
 
 
-[851ec37efad09c8](https://github.com/bsorrentino/minitemplator/commit/851ec37efad09c8) bsorrentino *2014-01-14 15:40:42*
+[c602ff75d04fdfd](https://github.com/bsorrentino/minitemplator/commit/c602ff75d04fdfd) bsorrentino *2013-06-04 15:05:10*
 
 
 ## minitemplator-repackaged-1.0
 ### Generic changes
+
+**[maven-release-plugin] prepare release minitemplator-repackaged-1.0**
+
+
+[242e8e33a61f5da](https://github.com/bsorrentino/minitemplator/commit/242e8e33a61f5da) bsorrentino *2013-06-04 15:04:54*
 
 **prepare for deloy**
 
@@ -306,5 +477,10 @@
  * git-svn-id: http://svn.source-code.biz/minitemplator-java/trunk@2 6c58f732-1d77-11df-89ac-57ff1df56b55
 
 [29a7f8bd1bf8f29](https://github.com/bsorrentino/minitemplator/commit/29a7f8bd1bf8f29) chdh *2010-02-19 19:07:33*
+
+**git-svn-id: http://svn.source-code.biz/minitemplator-java/trunk@1 6c58f732-1d77-11df-89ac-57ff1df56b55**
+
+
+[79c4a3ff7ce5525](https://github.com/bsorrentino/minitemplator/commit/79c4a3ff7ce5525) chdh *2010-02-19 17:01:23*
 
 
