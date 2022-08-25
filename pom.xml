@@ -3,7 +3,7 @@
   <groupId>org.bsc.util</groupId>
   <artifactId>minitemplator-repackaged</artifactId>
   <name>MiniTemplator - ${project.version}</name>
-  <version>1.4</version>
+  <version>1.5-SNAPSHOT</version>
   <description>MiniTemplator is a compact template engine for HTML files.</description>
   <url>http://www.source-code.biz/MiniTemplator</url>
 
@@ -144,6 +144,7 @@
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
 <profiles>
