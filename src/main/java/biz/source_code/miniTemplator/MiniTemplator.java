@@ -677,7 +677,7 @@ public class MiniTemplator {
 
         generateOutput(out);
         out.flush();
-        return baos.toString();
+        return baos.toString(charset.name());
     }
   }
 

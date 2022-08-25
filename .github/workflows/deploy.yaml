@@ -4,10 +4,8 @@
 name: Deploy New Version
 
 on: workflow_dispatch
-# on:
-# push:
-#   tags:
-#     - 'v*'
+release:
+  types: [created]
 
 jobs:
   build:
