@@ -112,7 +112,7 @@
             <groupId>se.bjurr.gitchangelog</groupId>
             <artifactId>git-changelog-maven-plugin</artifactId>
             <inherited>false</inherited>
-            <version>1.61</version>
+            <version>1.89</version>
             <!-- Minimal config // -->
             <configuration>
                 <settingsFile>changelog.json</settingsFile>
