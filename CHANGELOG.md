@@ -2,8 +2,28 @@
 
 <!-- Changelog for bsorrentino minitemplator. -->
 
-## Next release
+## v1.4.1
 ### Generic changes
+
+**Merge branch 'release/1.4.1'**
+
+
+[1174e9fd2f5774a](https://github.com/bsorrentino/minitemplator/commit/1174e9fd2f5774a) bsorrentino *2022-08-25 13:38:04*
+
+**chore: move to next release version**
+
+
+[a41300a5d4d1ed9](https://github.com/bsorrentino/minitemplator/commit/a41300a5d4d1ed9) bsorrentino *2022-08-25 13:36:55*
+
+**docs: update changelog**
+
+
+[d083f89592ea12c](https://github.com/bsorrentino/minitemplator/commit/d083f89592ea12c) bsorrentino *2022-08-25 13:33:47*
+
+**build(git-changelog-maven-plugin): upgrade maven plugin**
+
+
+[282d33087eb8063](https://github.com/bsorrentino/minitemplator/commit/282d33087eb8063) bsorrentino *2022-08-25 13:33:30*
 
 **build(deploy.yaml): add trigger on release**
 
