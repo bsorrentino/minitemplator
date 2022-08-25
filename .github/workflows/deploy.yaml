@@ -3,7 +3,7 @@
 
 name: Deploy New Version
 
-on:
+:on:
   workflow_dispatch:
   release:
     types: [created]
