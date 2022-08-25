@@ -3,9 +3,10 @@
 
 name: Deploy New Version
 
-on: workflow_dispatch
-release:
-  types: [created]
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
 
 jobs:
   build:
